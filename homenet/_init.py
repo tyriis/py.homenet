@@ -17,6 +17,8 @@ def init(confdict, db, ctx, mqtt):
     mqtt.subscribe('node/01', msg_handler)
     return ConfiguredHomenetModule()
 
+def test(ctx, msg):
+    print(msg.payload)
 
 class ConfiguredHomenetModule(ConfiguredModule):
 

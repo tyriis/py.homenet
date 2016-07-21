@@ -7,6 +7,6 @@ from sqlalchemy.orm import relationship
 class Node(Storable):
     name = Column(String, nullable=False)
     location_id = Column(IdType, ForeignKey('_location.id'), nullable=False)
-    location = relationship('Location')
+    location = relationship('Location', backref='nodes')
     identifier = Column(String, unique=True)
 

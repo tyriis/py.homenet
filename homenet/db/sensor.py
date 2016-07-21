@@ -7,7 +7,7 @@ from sqlalchemy.orm import relationship
 class Sensor(Storable):
     name = Column(String, nullable=False)
     node_id = Column(IdType, ForeignKey('_node.id'), nullable=False)
-    node = relationship('Node')
+    node = relationship('Node', backref='sensors')
     key = Column(String, nullable=False)
     unit = Column(String, nullable=False)
 
