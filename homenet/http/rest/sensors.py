@@ -3,14 +3,15 @@ import homenet.db as db
 import json
 
 @router.route('rest/sensors', '/rest/sensors')
-def locations(ctx):
+def sensors(ctx):
     ctx.http.response.content_type = 'application/json'
-    sensors = ctx.db.query(db.Sensor).all()
-    data = [sensor.as_dict() for sensor in sensors]
-    return json.dumps(data, sort_keys=True, indent=4, separators=(',', ': '))
+    if ctx.http.request.method == 'POST':
+        sensor = db.Sensor.from_dict(ctx, ctx.http.request.POST)
+        return sensor.as_JSON()
+    return db.Sensor.get_full_json(ctx)
 
 @router.route('rest/sensor', '/rest/sensors/{sensor.id}')
-def location(ctx, sensor: db.Sensor):
+def sensor(ctx, sensor: db.Sensor):
     ctx.http.response.content_type = 'application/json'
-    return json.dumps(sensor.as_dict(), sort_keys=True, indent=4, separators=(',', ': '))
+    return sensor.as_JSON()
 
