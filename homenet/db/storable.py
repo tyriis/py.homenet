@@ -52,7 +52,7 @@ def from_dict(cls, ctx, dict):
 Storable.from_dict = from_dict
 
 @classmethod
-def get_full_json(cls, ctx, limit=1):
+def get_full_json(cls, ctx, limit=25):
     data = [o.as_dict() for o in ctx.db.query(cls).limit(limit)]
     return json.dumps(data, sort_keys=True, indent=4, separators=(',', ': '))
 
