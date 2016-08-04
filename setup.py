@@ -24,9 +24,14 @@ setup(
         'score.cli',
         'score.http',
         'score.serve',
+        'score.auth',
+        'score.session',
+        'score.html',
+        'score.tpl[jinja2]',
         'sqlalchemy_utils',
         'passlib',
         'PyYAML',
+        'docutils'
     ],
     entry_points={
         'score.cli': [

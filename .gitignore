@@ -90,3 +90,4 @@ ENV/
 
 local.conf
 database.sqlite3
+_cache/
