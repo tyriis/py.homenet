@@ -19,8 +19,8 @@ def reset(click):
     with score.ctx.Context() as ctx:
         score.db.destroy()
         score.db.create()
-        source = 'http://score-framework.org/doc/_downloads/moswblog.yaml'
-        objects = load_data(source)
-        for cls in objects:
-            for id in objects[cls]:
-                ctx.db.add(objects[cls][id])
+        #source = 'http://score-framework.org/doc/_downloads/moswblog.yaml'
+        #objects = load_data(source)
+        #for cls in objects:
+            #for id in objects[cls]:
+                #ctx.db.add(objects[cls][id])
