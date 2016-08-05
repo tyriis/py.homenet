@@ -1,3 +1,5 @@
+{{ css(ctx) }}
+{{ js(ctx) }}
 {% for article in articles %}
     <a href="{{ ctx.url('article', article) }}">{{ article.title }}</a><br>
 {% endfor %}

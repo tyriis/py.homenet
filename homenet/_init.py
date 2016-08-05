@@ -1,5 +1,6 @@
 from score.init import ConfiguredModule
 from homenet.mqtt import msg_handler
+from score.auth import Authenticator
 
 defaults = {
 }
@@ -12,16 +13,50 @@ def init(confdict, db, ctx, mqtt):
     """
     conf = defaults.copy()
     conf.update(confdict)
-    #print(ctx.db.query(db.Node).first())
-    #mqtt.subscribe('$SYS/broker/uptime', test)
     mqtt.subscribe('node/01', msg_handler)
     return ConfiguredHomenetModule()
 
-#def test(ctx, msg):
-#    print(msg.payload)
 
 class ConfiguredHomenetModule(ConfiguredModule):
 
     def __init__(self):
         import homenet
         super().__init__(homenet)
+
+def login_preroute(ctx):
+    if ctx.http.request.method == 'POST':
+        # the next line will cause the auth-module to log in
+        ctx.user
+
+
+class LoginAuthenticator(Authenticator):
+
+    def retrieve(self, ctx):
+        user = self._perform_login(ctx)
+        if user:
+            return user
+        else:
+            # the login was not successful, ask the next authenticator to
+            # retrieve the current user.
+            return self.next.retrieve(ctx)
+
+    def _perform_login(self, ctx):
+        if not hasattr(ctx, 'http'):
+            return None
+        if 'username' not in ctx.http.request.POST:
+            return None
+        if 'password' not in ctx.http.request.POST:
+            return None
+        username = ctx.http.request.POST['username']
+        user = ctx.db.query(db.User).\
+            filter(db.User.username == username).\
+            first()
+        if not user:
+            return None
+        if not user.verify_password(ctx.http.request.POST['password']):
+            return None
+        # we have a logged in user, so pass it to all subsequent
+        # authenticators to allow them storing the value.
+        self.next.store(ctx, user)
+        return user
+

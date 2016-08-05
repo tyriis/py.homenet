@@ -27,6 +27,8 @@ setup(
         'score.auth',
         'score.session',
         'score.html',
+        'score.js',
+        'score.css',
         'score.tpl[jinja2]',
         'sqlalchemy_utils',
         'passlib',
