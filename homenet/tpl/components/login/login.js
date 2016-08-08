@@ -15,7 +15,7 @@
         disableSubmit();
         usernameInput.addEventListener('keyup', inputHandler);
         passwordInput.addEventListener('keyup', inputHandler);
-        submitButton.addEventListener('click', submitHandler);
+        form.addEventListener('submit', submitHandler);
     }
 
     // when login is validated, enable button
@@ -50,6 +50,7 @@
     function validateForm() {
         if (validateField(usernameInput) && validateField(passwordInput)) {
             enableSubmit();
+            return true;
         }
     }
 

@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>{% block title %}{% endblock %}</title>
+    {# load all css elements here #}
     {{ css(ctx) }}
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700">
 </head>
@@ -17,8 +18,9 @@
     {% block content %}
     {% endblock %}
     
-    {# load these elements first #}
-    {{ js(ctx, 'lib/_ajax.js')}}
-    {{ js(ctx) }}
+    {# load js elements #}
+    {% block js %}
+        {{ js(ctx, 'lib/_ajax.js') }}
+    {% endblock %}
 </body>
 </html>

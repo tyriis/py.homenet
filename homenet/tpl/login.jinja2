@@ -2,5 +2,15 @@
 {% extends '_page.jinja2' %}
 
 {% block content %}
-    {% include 'components/loginform/loginform.jinja2' %}
+    <form action="/" method="post">
+       <fieldset>
+            <input type="text" name="username" placeholder="Username">
+            <input type="password" name="password" placeholder="Password">
+            <button type="submit">Okay</button>
+        </fieldset>
+    </form>
+{% endblock %}
+
+{% block js %}
+    {{ js(ctx, 'components/login/login.js') }}
 {% endblock %}
