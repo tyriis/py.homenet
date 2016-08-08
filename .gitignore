@@ -90,5 +90,6 @@ ENV/
 
 local.conf
 database.sqlite3
+_cache.sqlite3
 _cache/
 _assets/
