@@ -1,0 +1,72 @@
+homenet.db.Location:
+
+    Keller1:
+        name: Keller1
+
+    Keller2:
+        name: Keller2
+
+    KellerTreppe:
+        name: Keller Treppe
+
+    Vorzimmer:
+        name: Vorzimmer
+
+    Waschküche:
+        name: Waschküche
+
+    Wohnzimmer:
+        name: Wohnzimmer
+
+    Küche:
+        name: Küche
+
+    Treppe:
+        name: Treppe
+
+    Flur:
+        name: Flur
+
+    Kinderzimmer:
+        name: Kinderzimmer
+
+    Bad:
+        name: Bad
+
+    Schlafzimmer:
+        name: Schlafzimmer
+
+    Arbeitszimmer:
+        name: Arbeitszimmer
+
+    Terasse:
+        name: Terasse
+
+homenet.db.Node:
+
+    node01:
+        name: node01
+        location: KellerTreppe
+        identifier: node01
+
+homenet.db.Sensor:
+
+    PIR:
+        name: PIR
+        node: node01
+        key: value
+        unit: motion
+
+    SI7021_temp:
+        name: SI7021
+        node: node01
+        key: temperature
+        unit: °C
+
+    SI7021_humi:
+        name: SI7021
+        node: node01
+        key: humidity
+        unit: '%'
+
+
