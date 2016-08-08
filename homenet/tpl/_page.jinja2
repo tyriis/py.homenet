@@ -1,0 +1,20 @@
+<html>
+    <head>
+        {{ css(ctx) }}
+    </head>
+    <body>
+        {% include 'test.jinja2' %}
+        {% block content %}
+            ich bin die normale seite
+        {% endblock %}
+
+        {% block js %}
+            {{ js(ctx) }}
+        {% endblock %}
+        
+        {% block morejs %}
+            blub blub
+        {% endblock %}
+        
+    </body>
+</html>
