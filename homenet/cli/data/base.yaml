@@ -47,7 +47,7 @@ homenet.db.Node:
     node01:
         name: node01
         location: KellerTreppe
-        identifier: node01
+        identifier: node/01
 
 homenet.db.Sensor:
 

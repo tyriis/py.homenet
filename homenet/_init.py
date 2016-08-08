@@ -1,6 +1,7 @@
 from score.init import ConfiguredModule
 from homenet.mqtt import msg_handler
 from score.auth import Authenticator
+from . import db
 
 defaults = {
 }
