@@ -11,5 +11,3 @@ class User(Storable):
             return self.password == password
         return False
 
-class Blogger(User):
-    pass
