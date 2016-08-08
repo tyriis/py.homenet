@@ -1,5 +1,6 @@
+{# inherits from basic page #}
 {% extends '_page.jinja2' %}
 
 {% block content %}
-    ich bin der login ananannanana
+    {% include 'components/loginform/loginform.jinja2' %}
 {% endblock %}

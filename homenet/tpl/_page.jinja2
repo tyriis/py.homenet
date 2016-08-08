@@ -1,20 +1,24 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        {{ css(ctx) }}
-    </head>
-    <body>
-        {% include 'test.jinja2' %}
-        {% block content %}
-            ich bin die normale seite
-        {% endblock %}
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}{% endblock %}</title>
+    {{ css(ctx) }}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700">
+</head>
+<body>
 
-        {% block js %}
-            {{ js(ctx) }}
+    <header>
+        <h1>Dashboard</h1>
+        {% block usermenu %}
         {% endblock %}
-        
-        {% block morejs %}
-            blub blub
-        {% endblock %}
-        
-    </body>
+    </header>
+
+    {% block content %}
+    {% endblock %}
+    
+    {# load these elements first #}
+    {{ js(ctx, 'lib/_ajax.js')}}
+    {{ js(ctx) }}
+</body>
 </html>

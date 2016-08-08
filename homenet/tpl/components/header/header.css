@@ -1,0 +1,12 @@
+header {
+    height: 70px;
+    line-height: 70px;
+    background-color: #2196F3;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: #F5F5F5;
+}
