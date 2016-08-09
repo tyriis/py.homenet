@@ -1,0 +1,33 @@
+.accordion {
+    ul {
+        text-align: center;
+    }
+
+    li.active button,
+    li:hover button {
+        background: #E9E9E9;
+    }
+
+    button {
+        padding: 15px;
+        width: 100%;
+        font-size: 1rem;
+        background: #FFF;
+        color: #757575;
+        border: none;
+        outline: none;
+        cursor: pointer;
+    }
+    .details {
+        opacity: 0;
+        max-height: 0;
+        transition: 0.6s ease-in-out;
+    }
+
+    li.active .details {
+        padding: 15px;
+        overflow: hidden;
+        opacity: 1;
+        max-height: 500px;
+    }
+}
