@@ -1,19 +1,20 @@
+/*
+    ajax._METHOD_('url', {data: bla, format: 'json'}).then(function(response) {
+        console.log('Success!', response);
+    }, function(error) {
+        console.error('Failed!', error);
+    });
+*/
+
 /* jshint browser: true */
 /* jshint esnext: true */
 /* from david walsh: https://davidwalsh.name/promises */
 
-(function(window) {
+// define module('module name', ['dependency 1, 2..'], function...)
+define('ajax', [], function() {
     'use strict';
 
-    // make it available in global scope
-    window.ajax = {
-        get: get,
-        post: post,
-        put: put,
-        delete: del
-    };
-
-    // default object
+    // default parameters
     var defaults = {
         method: null,
         url: null,
@@ -21,7 +22,13 @@
         data: null
     };
 
-    // merge default object with passed params object
+    /**
+     * merge default object with passed params object
+     * @private
+     * @param   {string|object} url
+     * @param   {object} params
+     * @returns {object} merged params
+     */
     function _merge(url, params) {
         // create empty params object
         params = params || {};
@@ -44,10 +51,10 @@
         return params;
     }
 
-    /*
-        set function for every ajax method.
-        first merge objects, then set method and return promise
-    */
+    /**
+     * set function for every ajax method.
+     * first merge objects, then set method and return promise
+     */
     function get(url, params) {
         params = _merge(url, params);
         params.method = 'GET';
@@ -72,10 +79,9 @@
         return _request(params);
     }
 
-    /*
-        ajax promise
-
-    */
+    /**
+     * ajax promise
+     */
     function _request(params) {
         // new promise
         return new Promise(function(resolve, reject) {
@@ -123,13 +129,10 @@
         });
     }
 
-    /*
-
-
-    ajax._METHOD_('url', {data: bla, format: 'json'}).then(function(response) {
-        console.log('Success!', response);
-    }, function(error) {
-        console.error('Failed!', error);
-    });
-    */
-})(window);
+    return {
+        get: get,
+        post: post,
+        put: put,
+        delete: del
+    };
+});

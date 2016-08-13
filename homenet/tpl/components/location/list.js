@@ -1,10 +1,10 @@
 /* jshint browser: true */
 /* jshint esnext: true */
 
-(function() {
+define('components/location/list', ['ajax'], function(ajax) {
     'use strict';
 
-    var url = "../../rest/locations";
+    var url = "/rest/locations";
     var wrapper = document.querySelector('.accordion');
     var details = document.querySelector('.details');
 
@@ -21,6 +21,7 @@
             var li = document.createElement('li');
             var button = document.createElement('button');
             button.innerHTML = obj.name;
+            /* bind li element and current object to toggle function */
             button.addEventListener('click', toggleHandler.bind(button, li, obj));
             li.appendChild(button);
             ul.appendChild(li);
@@ -46,5 +47,9 @@
         } else {
             li.removeChild(details);
         }
+        console.log(obj.nodes);
     }
-})();
+    
+});
+
+require(['components/location/list']);
