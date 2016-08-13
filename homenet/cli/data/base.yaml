@@ -39,8 +39,8 @@ homenet.db.Location:
     Arbeitszimmer:
         name: Arbeitszimmer
 
-    Terasse:
-        name: Terasse
+    Terrasse:
+        name: Terrasse
 
 homenet.db.Node:
 
