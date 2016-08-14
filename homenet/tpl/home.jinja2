@@ -10,5 +10,6 @@
 
 {% block js %}
     {{ super() }}
+    {{ js(ctx, 'components/location/details.js') }}
     {{ js(ctx, 'components/location/list.js') }}
 {% endblock %}

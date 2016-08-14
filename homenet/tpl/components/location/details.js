@@ -4,31 +4,38 @@
 define('components/location/details', ['ajax'], function(ajax) {
     'use strict';
 
-    var url = "/rest/sensors";
+    var baseUrl = "/rest/locations/%id%/sensors";
     
+    function get(id) {
+        var url = baseUrl.replace('%id%', id);
+        return ajax.get(url, {format: 'json'}).then(function(response) {
+            return createDetails(response);
+        });
+    }
     
-
-    ajax.get(url, {format: 'json'}).then(function(response) {
-        createMenu(response);
-    }, function(error) {
-        console.error('Failed!', error);
-    });
-    
-    function createView(response) {
-        var ul = document.createElement('ul');
+    function createDetails(response) {
+        var div = document.createElement('div');
         for (var i = 0; i < response.length; i++) {
             var obj = response[i];
-            var li = document.createElement('li');
-            var button = document.createElement('button');
-            button.innerHTML = obj.name;
-            /* bind li element and current object to toggle function */
-            button.addEventListener('click', toggleHandler.bind(button, li, obj));
-            li.appendChild(button);
-            ul.appendChild(li);
+            var a = document.createElement('a');
+            a.href = '#';
+            var figure = document.createElement('figure');
+            var img = document.createElement('img');
+            img.src = '/images/' + obj.key + '.svg';
+            var figcaption = document.createElement('figcaption');
+            console.log(obj);
+            figcaption.innerHTML = obj.last_action.value + '&nbsp;' + obj.unit;
+            figure.appendChild(img);
+            figure.appendChild(figcaption);
+            a.appendChild(figure);
+            div.appendChild(a);
         }
-        wrapper.appendChild(ul);
+        return div;
     }
-
+    
+    return {
+        get: get
+    };
     /*function toggleHandler(li, obj, event) {
         var parent = li.parentNode;
         var activeNodes = parent.querySelectorAll('li.active');
@@ -50,4 +57,3 @@ define('components/location/details', ['ajax'], function(ajax) {
         console.log(obj.nodes);
     }*/
 });
-

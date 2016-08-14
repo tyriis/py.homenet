@@ -1,12 +1,12 @@
 /* jshint browser: true */
 /* jshint esnext: true */
 
-define('components/location/list', ['ajax'], function(ajax) {
+define('components/location/list', ['ajax', 'components/location/details'], function(ajax, details) {
     'use strict';
 
     var url = "/rest/locations";
     var wrapper = document.querySelector('.accordion');
-    var details = document.querySelector('.details');
+    var detailsWrapper = document.querySelector('.details');
 
     ajax.get(url, {format: 'json'}).then(function(response) {
         createMenu(response);
@@ -43,13 +43,17 @@ define('components/location/list', ['ajax'], function(ajax) {
         // and toggle new active class
         li.classList.toggle('active');
         if (li.classList.contains('active')) {
-            li.appendChild(details);
+            li.appendChild(detailsWrapper);
+            // clear wrapper
+            detailsWrapper.innerHTML = '';
+            // append detail view
+            details.get(obj.id).then(function(node) {
+                detailsWrapper.appendChild(node);
+            });
         } else {
-            li.removeChild(details);
+            li.removeChild(detailsWrapper);
         }
-        console.log(obj.nodes);
     }
-    
 });
 
 require(['components/location/list']);
