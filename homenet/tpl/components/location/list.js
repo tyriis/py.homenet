@@ -7,11 +7,10 @@ define('components/location/list', ['ajax', 'components/location/details'], func
     var url = "/rest/locations";
     var wrapper = document.querySelector('.accordion');
     var detailsWrapper = document.querySelector('.details');
+    var interval;
 
     ajax.get(url, {format: 'json'}).then(function(response) {
         createMenu(response);
-    }, function(error) {
-        console.error('Failed!', error);
     });
 
     function createMenu(response) {
@@ -30,6 +29,10 @@ define('components/location/list', ['ajax', 'components/location/details'], func
     }
 
     function toggleHandler(li, obj, event) {
+        // if interval exists, clear
+        if (interval) {
+            clearInterval(interval);
+        }
         var parent = li.parentNode;
         var activeNodes = parent.querySelectorAll('li.active');
         // if any li has active class and is current li, continue
@@ -47,12 +50,20 @@ define('components/location/list', ['ajax', 'components/location/details'], func
             // clear wrapper
             detailsWrapper.innerHTML = '';
             // append detail view
-            details.get(obj.id).then(function(node) {
-                detailsWrapper.appendChild(node);
-            });
+            showDetails(obj.id);
+            // setInterval for uptodate sensor data every 10 sec
+            interval = setInterval(function() {
+                showDetails(obj.id);
+            }, 10000);
         } else {
             li.removeChild(detailsWrapper);
         }
+    }
+
+    function showDetails(id) {
+        details.get(id).then(function(node) {
+            detailsWrapper.innerHTML = node.innerHTML;
+        });
     }
 });
 

@@ -5,8 +5,15 @@ define('components/location/details', ['ajax'], function(ajax) {
     'use strict';
 
     var baseUrl = "/rest/locations/%id%/sensors";
+    var currentId;
     
+    /**
+     * makes ajax request for sensor data of specific location and builds an access point for menu, to make module loading possible
+     * @param   {number} id id of the current clicked location in menu
+     * @returns {object} Promise
+     */
     function get(id) {
+        currentId = id;
         var url = baseUrl.replace('%id%', id);
         return ajax.get(url, {format: 'json'}).then(function(response) {
             return createDetails(response);
@@ -23,7 +30,6 @@ define('components/location/details', ['ajax'], function(ajax) {
             var img = document.createElement('img');
             img.src = '/images/' + obj.key + '.svg';
             var figcaption = document.createElement('figcaption');
-            console.log(obj);
             figcaption.innerHTML = obj.last_action.value + '&nbsp;' + obj.unit;
             figure.appendChild(img);
             figure.appendChild(figcaption);
