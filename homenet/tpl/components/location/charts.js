@@ -1,69 +1,60 @@
 /* jshint browser: true */
 /* jshint esnext: true */
 
-(function(window) {
+define('components/location/charts', ['ajax'], function(ajax) {
     'use strict';
 
-    var url = "/rest/sensors";
+    var baseUrl = "/rest/sensors/%id%/actions/day";
     
+    /**
+     * makes ajax request for 24h sensor data of specific sensor in current location and builds an access point for details, to make module loading possible
+     * @param   {number} id of current sensor in specific location
+     * @returns {object} Promise
+     */
+    function get(sensor) {
+        var url = baseUrl.replace('%id%', sensor.id);
+        return ajax.get(url, {format: 'json'}).then(function(response) {
+            return createCharts(response, sensor);
+        });
+    }
     
-
-    ajax.get(url, {format: 'json'}).then(function(response) {
-        createMenu(response);
-    }, function(error) {
-        console.error('Failed!', error);
-    });
-    
-    window.createView = function(response) {
-        var ul = document.createElement('ul');
+    // load the visualisation api and the line chart package
+    google.charts.load('current', {'packages':['corechart']});
+    /**
+     * creates Google Charts element for chartview after clicking on sensor data overview in specific location
+     * @param   {object} response full json object with 24h data of specific sensor
+     * @returns {object} returns div with all elements to map data
+     */
+    function createCharts(response, sensor) {
+        // creates the element for the google chart
+        var figure = document.createElement('figure');
+        figure.classList.add('chart');
+        var sensorData = [['Time', sensor.unit]];
         for (var i = 0; i < response.length; i++) {
             var obj = response[i];
-            var li = document.createElement('li');
-            var button = document.createElement('button');
-            button.innerHTML = obj.name;
-            /* bind li element and current object to toggle function */
-            button.addEventListener('click', toggleHandler.bind(button, li, obj));
-            li.appendChild(button);
-            ul.appendChild(li);
+            sensorData.push([new Date(obj.time), obj.value]);
         }
-        wrapper.appendChild(ul);
+        // set a callback to run when the api is loaded
+        google.charts.setOnLoadCallback(drawChart);
+        // callback that creates the data table, initialises the line chart, passes the data and draws it
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable(sensorData);
+            // set chart options
+            var options = {
+              title: sensor.key,
+              hAxis: {title: 'Hours',  titleTextStyle: {color: '#333'}},
+              vAxis: {minValue: 0}
+            };
+            // initialize the chart and pass some options
+            var chart = new google.visualization.AreaChart(figure);
+            chart.draw(data, options);
+        }
+        // returns the chart for Promise
+        return figure;
     }
-
-    /*function toggleHandler(li, obj, event) {
-        var parent = li.parentNode;
-        var activeNodes = parent.querySelectorAll('li.active');
-        // if any li has active class and is current li, continue
-        for (var i = 0; i < activeNodes.length; i++) {
-            if (activeNodes[i] === li) {
-                continue;
-            }
-            // else remove active class
-            activeNodes[i].classList.remove('active');
-        }
-        // and toggle new active class
-        li.classList.toggle('active');
-        if (li.classList.contains('active')) {
-            li.appendChild(details);
-        } else {
-            li.removeChild(details);
-        }
-        console.log(obj.nodes);
-    }*/
-})(window);
-
-
-
-/*define('ajax', [], function() {
-    var ajax = ....
     
-    // anstelle von window.ajax
-    return ajax;
-});
-
-define('view', ['ajax'], function(ajax) {
-    ajax.get(..).then(function...
-    view = ...
+    return {
+        get: get
+    };
     
-    return view;
 });
-*/

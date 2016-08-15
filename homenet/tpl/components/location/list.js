@@ -5,7 +5,7 @@ define('components/location/list', ['ajax', 'components/location/details'], func
     'use strict';
 
     var url = "/rest/locations";
-    var wrapper = document.querySelector('.accordion');
+    var wrapper = document.querySelector('.list');
     var detailsWrapper = document.querySelector('.details');
     var interval;
 
@@ -62,7 +62,8 @@ define('components/location/list', ['ajax', 'components/location/details'], func
 
     function showDetails(id) {
         details.get(id).then(function(node) {
-            detailsWrapper.innerHTML = node.innerHTML;
+            detailsWrapper.innerHTML = '';
+            detailsWrapper.appendChild(node);
         });
     }
 });
