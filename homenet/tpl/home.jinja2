@@ -9,7 +9,10 @@
 {% endblock %}
 
 {% block js %}
+    {# get js files from basic page before 'block js' #}
     {{ super() }}
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    {{ js(ctx, 'components/location/charts.js') }}
     {{ js(ctx, 'components/location/details.js') }}
     {{ js(ctx, 'components/location/list.js') }}
 {% endblock %}
