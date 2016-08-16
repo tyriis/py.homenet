@@ -18,7 +18,7 @@ define('components/location/charts', ['ajax'], function(ajax) {
         });
     }
     
-    // load the visualisation api and the line chart package
+    // load the google charts api with area chart package
     google.charts.load('current', {'packages':['corechart']});
     /**
      * creates Google Charts element for chartview after clicking on sensor data overview in specific location
@@ -29,23 +29,63 @@ define('components/location/charts', ['ajax'], function(ajax) {
         // creates the element for the google chart
         var figure = document.createElement('figure');
         figure.classList.add('chart');
+
+        // create and populate the data table
         var sensorData = [['Time', sensor.unit]];
         for (var i = 0; i < response.length; i++) {
             var obj = response[i];
-            sensorData.push([new Date(obj.time), obj.value]);
+            var date = formatDate(obj.time);
+            sensorData.push([date, obj.value]);
         }
         // set a callback to run when the api is loaded
         google.charts.setOnLoadCallback(drawChart);
-        // callback that creates the data table, initialises the line chart, passes the data and draws it
+
+        /**
+         * gets data, sets options and draws chart
+         */
         function drawChart() {
             var data = google.visualization.arrayToDataTable(sensorData);
             // set chart options
             var options = {
-              title: sensor.key,
-              hAxis: {title: 'Hours',  titleTextStyle: {color: '#333'}},
-              vAxis: {minValue: 0}
+                title: sensor.key,
+                width: '100%',
+                height: '100%',
+                hAxis: {
+                    title: 'Date',
+                    titleTextStyle: {color: '#333'},
+                    gridlines: {count: 4}
+                },
+                vAxis: {
+                    format: '',
+                    minValue: '',
+                    maxValue: '',
+                    gridlines: {count: 5}
+                },
+                legend: {position: 'none'}
             };
-            // initialize the chart and pass some options
+            // set specific options for every chart
+            switch (sensor.key) {
+                case 'humidity':
+                    options.vAxis.format = '#\'%\'';
+                    options.vAxis.minValue = 40;
+                    options.vAxis.maxValue = 80;
+                    options.vAxis.gridlines.count = 3;
+                    break;
+                case 'temperature':
+                    options.vAxis.format = '# °C';
+                    options.vAxis.minValue = 14;
+                    options.vAxis.maxValue = 35;
+                    options.vAxis.gridlines.count = 3;
+                    break;
+                case 'value':
+                    options.vAxis.format = '';
+                    options.vAxis.gridlines.count = 2;
+                    break;
+                default:
+                    options.vAxis.format = '';
+                    options.vAxis.gridlines.count = 5;
+            }
+            // create and draw the visualization to element
             var chart = new google.visualization.AreaChart(figure);
             chart.draw(data, options);
         }
@@ -53,6 +93,22 @@ define('components/location/charts', ['ajax'], function(ajax) {
         return figure;
     }
     
+    /**
+     * formats Timestamp to common date for hAxis
+     * @param   {number} timestamp of sensor action
+     * @returns {string} returns formatted date
+     */
+    function formatDate(timestamp) {
+        var date = new Date(timestamp);
+        // hours part from the timestamp
+        var hours = date.getHours();
+        // Minutes part from the timestamp
+        var minutes = "0" + date.getMinutes();
+        // will display time in 10:30:23 format
+        var formattedDate = hours + ':' + minutes.substr(-2);
+        return formattedDate;
+    }
+
     return {
         get: get
     };
