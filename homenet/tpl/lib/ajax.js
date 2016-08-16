@@ -1,3 +1,4 @@
+/* from david walsh: https://davidwalsh.name/promises */
 /*
     ajax._METHOD_('url', {data: bla, format: 'json'}).then(function(response) {
         console.log('Success!', response);
@@ -8,7 +9,6 @@
 
 /* jshint browser: true */
 /* jshint esnext: true */
-/* from david walsh: https://davidwalsh.name/promises */
 
 // define module('module name', ['dependency 1, 2..'], function...)
 define('ajax', [], function() {
@@ -25,12 +25,12 @@ define('ajax', [], function() {
     /**
      * merge default object with passed params object
      * @private
-     * @param   {string|object} url
-     * @param   {object} params
-     * @returns {object} merged params
+     * @param   {string} url        url for ajax request
+     * @param   {object} [params={] specific params for the request, ie format, data etc.
+     * @returns {object} returns ready params object for further processing
      */
     function _merge(url, params) {
-        // create empty params object
+        // sets passed params object in variable or creates empty params object
         params = params || {};
         // if first param is string url, get value. else get value from object
         if (typeof(url) === "string") {
@@ -52,8 +52,10 @@ define('ajax', [], function() {
     }
 
     /**
-     * set function for every ajax method.
-     * first merge objects, then set method and return promise
+     * wrapper! set function for every ajax method. first merge objects, then set method and return promise
+     * @param   {string} url    url for ajax request
+     * @param   {object} params merged params object
+     * @returns {object} returns the promise
      */
     function get(url, params) {
         params = _merge(url, params);
@@ -80,7 +82,10 @@ define('ajax', [], function() {
     }
 
     /**
-     * ajax promise
+     * one and only promise for processing ajax request. checks format and sets specific headers, handle errors and sends request
+     * @private
+     * @param   {object} params merged params object
+     * @returns {object} returns the promise
      */
     function _request(params) {
         // new promise
@@ -128,7 +133,8 @@ define('ajax', [], function() {
            xhr.send(JSON.stringify(params.data));
         });
     }
-
+    
+    // return wrapper functions and make them available in required scope
     return {
         get: get,
         post: post,

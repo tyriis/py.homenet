@@ -4,13 +4,13 @@
 {% block title %}Dashboard Home{% endblock %}
 
 {% block content %}
-    <div class="accordion"></div>
+    <div class="list"></div>
     <div class="details"></div>
+    <div class="charts"></div>
 {% endblock %}
 
 {% block js %}
-    {# get js files from basic page before 'block js' #}
-    {{ super() }}
+    {# google charts api #}
     <script src="https://www.gstatic.com/charts/loader.js"></script>
     {{ js(ctx, 'components/location/charts.js') }}
     {{ js(ctx, 'components/location/details.js') }}

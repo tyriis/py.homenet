@@ -16,11 +16,11 @@
     {% block content %}
     {% endblock %}
     
-    {# load require.js first #}
+    {# load modules first #}
     {{ js(ctx, 'lib/require.js') }}
+    {{ js(ctx, 'lib/ajax.js') }}
     {# load js elements #}
     {% block js %}
-        {{ js(ctx, 'lib/ajax.js') }}
     {% endblock %}
 </body>
 </html>

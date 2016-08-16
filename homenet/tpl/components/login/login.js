@@ -11,6 +11,9 @@
     var passwordInput = form.querySelector('input[type=password]');
     var inputTimeout;
 
+    /**
+     * initialize loginform, all handlers are here
+     */
     function init() {
         disableSubmit();
         usernameInput.addEventListener('keyup', inputHandler);
@@ -18,17 +21,24 @@
         form.addEventListener('submit', submitHandler);
     }
 
-    // when login is validated, enable button
+    /**
+     * if login is valide, enable button
+     */
     function enableSubmit() {
         submitButton.removeAttribute('disabled');
     }
-
-    // disable button at page load
+    
+    /**
+     * disable button when page loads
+     */
     function disableSubmit() {
         submitButton.setAttribute('disabled', 'disabled');
     }
 
-    // prevent from triggering events while typing, 0,3 sec
+    /**
+     * prevent input from triggering events while typing, 0.3 sec
+     * @param {object} event keyup event
+     */
     function inputHandler(event) {
         if (inputTimeout) {
             clearTimeout(inputTimeout);
@@ -39,14 +49,20 @@
         }, 300);
     }
 
-    // if checks are failed, prevent from submit
+    /**
+     * if checks failed, prevent from submit
+     * @param {object} event submit event
+     */
     function submitHandler(event) {
         if (!validateForm()) {
             event.preventDefault();
         }
     }
 
-    // if checks of both fields are okay, enable submit button
+    /**
+     * if input of both fields are okay, enable submit button
+     * @returns {boolean} returns true
+     */
     function validateForm() {
         if (validateField(usernameInput) && validateField(passwordInput)) {
             enableSubmit();
@@ -54,7 +70,11 @@
         }
     }
 
-    // check if username and password input has correct input
+    /**
+     * check if username and password input has correct input
+     * @param   {object}  inputField current input element
+     * @returns {boolean} returns true
+     */
     function validateField(inputField) {
         // reset present errors
         removeError(inputField);
@@ -82,7 +102,11 @@
         return true;
     }
 
-    // show an error, if there are invalid inputs in actual field
+    /**
+     * show an error, if there are invalid inputs in actual field
+     * @param {string} msg        error message
+     * @param {object} inputField current input element
+     */
     function showError(msg, inputField) {
         if (!inputField.value) {
             return;
@@ -93,7 +117,10 @@
         inputField.parentNode.insertBefore(errorDiv, inputField.nextElementSibling);
     }
 
-    // if errors are present, reset them all
+    /**
+     * if errors are present, reset them all
+     * @param {object} inputField current input element
+     */
     function removeError(inputField) {
         while (inputField.nextElementSibling.className === 'error') {
             inputField.parentNode.removeChild(inputField.nextElementSibling);
