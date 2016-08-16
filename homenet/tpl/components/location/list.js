@@ -54,7 +54,7 @@ define('components/location/list', ['ajax', 'components/location/details'], func
             // setInterval for uptodate sensor data every 10 sec
             interval = setInterval(function() {
                 showDetails(obj.id);
-            }, 10000);
+            }, 10*1000);
         } else {
             li.removeChild(detailsWrapper);
         }
