@@ -1,4 +1,4 @@
-from ._router import router
+from .router import router
 
 
 @router.route('logout', '/logout')
