@@ -54,7 +54,7 @@ homenet.db.Sensor:
     PIR:
         name: PIR
         node: node01
-        key: value
+        key: motion
         unit: motion
 
     SI7021_temp:
