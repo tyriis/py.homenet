@@ -3,6 +3,14 @@
 
 {% block title %}Dashboard Home{% endblock %}
 
+{% block usermenu %}
+    <div class="usermenu">
+        <a href="{{ ctx.url('logout') }}">
+            <img src="/images/logout.svg" alt="logout-button" />
+        </a>
+    </div>
+{% endblock %}
+
 {% block content %}
     <div class="list"></div>
     <div class="details"></div>

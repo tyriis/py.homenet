@@ -1,0 +1,28 @@
+@import "css/vars";
+
+header {
+    height: 70px;
+    line-height: 70px;
+    background-color: $primary-color-dark;
+    text-align: center;
+
+    h1 {
+        font-size: 1.6rem;
+        font-weight: 400;
+        color: #F5F5F5;
+    }
+
+    .usermenu {
+        position: absolute;
+        top: 0;
+        right: 0;
+
+        img {
+            padding: calc(45px / 2);
+            width: 25px;
+            height: 25px;
+        }
+    }
+
+}
+
