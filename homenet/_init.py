@@ -1,5 +1,5 @@
 from score.init import ConfiguredModule
-from homenet.mqtt import msg_handler
+from homenet.mqtt import subscribe
 from score.auth import Authenticator
 from . import db
 
@@ -14,7 +14,7 @@ def init(confdict, db, ctx, mqtt):
     """
     conf = defaults.copy()
     conf.update(confdict)
-    mqtt.subscribe('node/01', msg_handler)
+    subscribe(ctx, mqtt)
     return ConfiguredHomenetModule()
 
 

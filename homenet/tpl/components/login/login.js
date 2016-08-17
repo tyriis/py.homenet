@@ -86,8 +86,8 @@
             return;
             }
             // check if username input has valid length, else show error
-            if (usernameInput.value.length < 6 || usernameInput.value.length > 20) {
-                showError('Der Username darf nur zwischen 6 und 20 Zeichen lang sein.', usernameInput);
+            if (usernameInput.value.length < 4 || usernameInput.value.length > 20) {
+                showError('Der Username darf nur zwischen 4 und 20 Zeichen lang sein.', usernameInput);
                 return;
             }
         // if event.target is password input
