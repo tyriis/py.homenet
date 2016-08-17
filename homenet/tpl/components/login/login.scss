@@ -27,6 +27,10 @@ input {
 }
 
 button {
+    &:disabled {
+        background: rgba(33, 150, 243, 0.5);
+        cursor: not-allowed;
+    }
     display: block;
     margin: 30px auto 0 auto;
     width: 100px;
@@ -35,10 +39,4 @@ button {
     color: #F5F5F5;
     border: none;
     cursor: pointer;
-}
-
-button:disabled {
-    /* needed for opacity */
-    background: rgba(33, 150, 243, 0.5);
-    cursor: not-allowed;
 }
