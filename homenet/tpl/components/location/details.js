@@ -53,28 +53,38 @@ define('components/location/details', ['ajax', 'components/location/charts'], fu
     }
     
     /**
-     * draw Charts for every sensor in current location
+     * first collect all solved promises, then draw charts for every sensor in current location
      * @param {object} sensors current sensor object from location
      */
     function renderCharts(sensors) {
-        chartsWrapper.innerHTML = '';
+        // array for promises
+        var promises = [];
+        // get the promises for every sensor in location
         for (var i = 0; i < sensors.length; i++) {
-            charts.get(sensors[i]).then(function(node) {
-                chartsWrapper.innerHTML += node.innerHTML;
-            });
+            promises.push(charts.get(sensors[i]));
         }
+        // handle all collected promises at once
+        Promise.all(promises).then(function(all) {
+            // clear wrapper
+            chartsWrapper.innerHTML = '';
+            // append all returned nodes of the promises in chartwrapper
+            for (var i = 0; i < all.length; i++) {
+                chartsWrapper.innerHTML += all[i].innerHTML;
+            }
+        });
     }
     
     /**
-     * clickHandler for charts display button which renders charts every 10 secs
+     * clickHandler for charts display button which renders charts every 30 secs
      * @param {object} sensors json, all sensors from current location
      * @param {object} event   click event
      */
     function clickHandler(sensors, event) {
         renderCharts(sensors);
+        // set interval for redraw with new values
         interval = setInterval(function() {
             renderCharts(sensors);
-        }, 10000);
+        }, 30*1000);
     }
     
     return {

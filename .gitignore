@@ -90,6 +90,7 @@ ENV/
 .ropeproject
 
 local.conf
+no-mqtt.conf
 database.sqlite3
 _cache.sqlite3
 _cache/

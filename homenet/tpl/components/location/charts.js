@@ -67,17 +67,17 @@ define('components/location/charts', ['ajax'], function(ajax) {
             switch (sensor.key) {
                 case 'humidity':
                     options.vAxis.format = '#\'%\'';
-                    options.vAxis.minValue = 40;
-                    options.vAxis.maxValue = 80;
+                    options.vAxis.minValue = 0;
+                    options.vAxis.maxValue = 100;
                     options.vAxis.gridlines.count = 3;
                     break;
                 case 'temperature':
                     options.vAxis.format = '# °C';
-                    options.vAxis.minValue = 14;
-                    options.vAxis.maxValue = 35;
+                    options.vAxis.minValue = -20;
+                    options.vAxis.maxValue = 40;
                     options.vAxis.gridlines.count = 3;
                     break;
-                case 'value':
+                case 'motion':
                     options.vAxis.format = '';
                     options.vAxis.gridlines.count = 2;
                     break;
