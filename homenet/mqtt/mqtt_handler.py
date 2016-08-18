@@ -15,7 +15,7 @@ def visit_node(ctx, msg, topic_parts):
     node = ctx.db.query(db.Node).get(node_id)
     data = json.loads(msg.payload.decode('utf-8'))
     now = datetime.now();
-    ref_time = datetime(now.year, now.month, now.day, now.hours, now.minutes, 0)
+    ref_time = datetime(now.year, now.month, now.day, now.hour, now.minutes, 0)
     if 'sensor' in data.keys():
         sensors = ctx.db.query(db.Sensor).\
             filter(db.Sensor.node == node).\
