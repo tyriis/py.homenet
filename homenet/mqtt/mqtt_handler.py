@@ -30,6 +30,7 @@ def visit_node(ctx, msg, topic_parts):
                 action.value=data[sensor.key]
                 if not action.id:
                     ctx.db.add(action)
-                log.info('SensorAction@node%s -> %s:%s %i'
-                        % (node_id, sensor.name, sensor.key, action.value))
+                log.info('SensorAction@node%s -> %s:%s -> %s %s'
+                        % (node_id, sensor.name, sensor.key,
+                            "{:}".format(action.value), sensor.unit))
 
