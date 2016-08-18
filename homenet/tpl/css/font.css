@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css?family=Droid+Sans:400,700');
+@import 'https://fonts.googleapis.com/css?family=Roboto';
 
 body {
-    font-family: 'Droid Sans', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }

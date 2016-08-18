@@ -112,8 +112,9 @@
             return;
         }
         var errorDiv = document.createElement('div');
-        errorDiv.className = 'error';
+        errorDiv.classList.add('error');
         errorDiv.innerHTML = msg;
+        inputField.classList.add('invalid');
         inputField.parentNode.insertBefore(errorDiv, inputField.nextElementSibling);
     }
 
@@ -122,8 +123,9 @@
      * @param {object} inputField current input element
      */
     function removeError(inputField) {
-        while (inputField.nextElementSibling.className === 'error') {
+        while (inputField.nextElementSibling.classList.contains('error')) {
             inputField.parentNode.removeChild(inputField.nextElementSibling);
+            inputField.classList.remove('invalid');
         }
     }
 
