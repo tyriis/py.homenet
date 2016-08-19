@@ -18,7 +18,7 @@ define('ajax', [], function() {
     var defaults = {
         method: null,
         url: null,
-        format: null,
+        format: 'json',
         data: null
     };
 
