@@ -1,0 +1,45 @@
+@import 'css/vars';
+
+.details {
+    display: none;
+    margin: auto;
+
+    figure {
+        box-sizing: border-box;
+        margin:5px;
+        width: calc(33.33% - 10px);
+        display:inline-block;
+        text-align: center;
+        padding: 30px 0;
+        border: 2px solid $accent-color-light;
+
+        img {
+            width: 30%;
+            height: auto;
+            color: $primary-text-color;
+        }
+
+        figcaption {
+            padding-top: 5px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: $primary-text-color;
+        }
+    }
+}
+
+li {
+    .details {
+        opacity: 0;
+        max-height: 0;
+    }
+    &.active {
+        .details {
+            padding: 15px;
+            overflow: hidden;
+            opacity: 1;
+            max-height: 500px;
+            display: block;
+        }
+    }
+}

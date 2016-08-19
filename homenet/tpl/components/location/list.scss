@@ -1,33 +1,56 @@
+@import "css/vars";
+
 .list {
     ul {
-        text-align: center;
-    }
+        li {
 
-    li.active button,
-    li:hover button {
-        background: #E9E9E9;
-    }
+            &:hover .list-button {
+                background: $primary-color-light;
+            }
 
-    button {
-        padding: 15px;
-        width: 100%;
-        font-size: 1rem;
-        background: #FFF;
-        color: #757575;
-        border: none;
-        outline: none;
-        cursor: pointer;
-    }
-    .details {
-        opacity: 0;
-        max-height: 0;
-        transition: 0.6s ease-in-out;
-    }
+            &.active {
 
-    li.active .details {
-        padding: 15px;
-        overflow: hidden;
-        opacity: 1;
-        max-height: 500px;
+                .list-button {
+                    background: $primary-color;
+                    color: $primary-color-text;
+                    &:before {
+                        content: '▼';
+                        margin-right: 10px;
+                        color: $primary-color-text;
+                        font-size: 1.2rem;
+                        top: 0;
+                    }
+                }
+
+                /*details {
+                    padding: 15px;
+                    overflow: hidden;
+                    opacity: 1;
+                    max-height: 500px;
+                }*/
+            }
+        }
+
+        .list-button {
+            &:before {
+                content: '▶';
+                margin-right: 10px;
+                top: -2px;
+                position: relative;
+                color: $primary-color-dark;
+            }
+
+            padding: 15px;
+            padding-left: 30px;
+            width: 100%;
+            font-size: 1rem;
+            text-align: left;
+            letter-spacing: 0.1rem;
+            background: $primary-color-text;
+            color: $primary-text-color;
+            border: 1px dotted $divider-color;
+            outline: none;
+            cursor: pointer;
+        }
     }
 }

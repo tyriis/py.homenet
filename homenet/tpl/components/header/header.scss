@@ -17,6 +17,18 @@ header {
         top: 0;
         right: 0;
 
+        .logout-icon {
+            display: block;
+            top: 22px;
+            right: 20px;
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            display: block;
+            background-color: $primary-color-text;
+            -webkit-mask-image: url('/images/logout.svg');
+            mask-image: url('/images/logout.svg');
+        }
         img {
             padding: calc(45px / 2);
             width: 25px;

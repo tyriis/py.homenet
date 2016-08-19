@@ -19,6 +19,7 @@ define('components/location/list', ['ajax', 'components/location/details'], func
             var obj = response[i];
             var li = document.createElement('li');
             var button = document.createElement('button');
+            button.classList.add('list-button');
             button.innerHTML = obj.name;
             /* bind li element and current object to toggle function */
             button.addEventListener('click', toggleHandler.bind(button, li, obj));
