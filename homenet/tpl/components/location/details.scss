@@ -1,8 +1,14 @@
 @import 'css/vars';
 
-.details {
-    display: none;
-    margin: auto;
+li {
+    .details {
+        margin: auto;
+        padding: 15px;
+        overflow: hidden;
+        opacity: 1;
+        max-height: 500px;
+        display: block;
+    }
 
     figure {
         box-sizing: border-box;
@@ -24,22 +30,6 @@
             font-size: 1.4rem;
             font-weight: 600;
             color: $primary-text-color;
-        }
-    }
-}
-
-li {
-    .details {
-        opacity: 0;
-        max-height: 0;
-    }
-    &.active {
-        .details {
-            padding: 15px;
-            overflow: hidden;
-            opacity: 1;
-            max-height: 500px;
-            display: block;
         }
     }
 }

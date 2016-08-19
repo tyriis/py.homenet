@@ -6,11 +6,9 @@ define('components/location/list', ['ajax', 'components/location/details', 'comp
 
     var url = "/rest/locations";
     var listNode = document.querySelector('.list');
-/*    var detailsWrapper = document.querySelector('.details');*/
-    var interval;
 
     // get all locations from rest api and render menu
-    ajax.get(url, {format: 'json'}).then(function(locations) {
+    ajax.get(url).then(function(locations) {
         createMenu(locations);
     });
 
@@ -22,15 +20,15 @@ define('components/location/list', ['ajax', 'components/location/details', 'comp
         // creates unordered list for accordion
         var ul = document.createElement('ul');
         for (var i = 0; i < locations.length; i++) {
-            var obj = locations[i];
+            var location = locations[i];
             // creates li element for each location
             var li = document.createElement('li');
             // inside li, create a clickable button
             var button = document.createElement('button');
             button.classList.add('list-button');
-            button.innerHTML = obj.name;
+            button.innerHTML = location.name;
             // add eventlistener to button and bind current li and location object to it
-            button.addEventListener('click', toggleHandler.bind(button, li, obj));
+            button.addEventListener('click', toggleHandler.bind(button, li, location));
             // append them all
             li.appendChild(button);
             ul.appendChild(li);
@@ -40,15 +38,11 @@ define('components/location/list', ['ajax', 'components/location/details', 'comp
 
     /**
      * toggles accordion
-     * @param {object} li    current li element
-     * @param {object} obj   current location object
-     * @param {object} event current event
+     * @param {object} li       current li element
+     * @param {object} location current location object
+     * @param {object} event    current event
      */
-    function toggleHandler(li, obj, event) {
-        // if interval exists, clear
-        if (interval) {
-            clearInterval(interval);
-        }
+    function toggleHandler(li, location, event) {
         var parent = li.parentNode;
         // find all li elements with class active
         var activeNodes = parent.querySelectorAll('li.active');
@@ -64,35 +58,42 @@ define('components/location/list', ['ajax', 'components/location/details', 'comp
         li.classList.toggle('active');
 
         if (li.classList.contains('active')) {
-/*            var li = li;*/
-/*            li.appendChild(detailsWrapper);
-            // clear wrapper
-            detailsWrapper.innerHTML = '';
-            // append detail view*/
-            showDetails(obj.id, li);
-            // setInterval for uptodate sensor data every 10 sec
-            interval = setInterval(function() {
-                showDetails(obj.id, li);
-            }, 10*1000);
+            details.create(location).then(function() {
+                createButton(li).addEventListener('click', toggleDetails.bind(null, location, li));
+            });
+            li.appendChild(details.node);
         } else {
-            for (var j = 0; j < li.childNodes.length; j++) {
-                if (li.childNodes[j].classList.contains('details')) {
-                    li.removeChild(li.childNodes[j]);
-                }
-            }
+            details.remove();
         }
     }
 
-    function showDetails(id, li) {
-        details.render(id).then(function(node) {
-            for (var i = 0; i < li.childNodes.length; i++) {
-                if (li.childNodes[i].classList.contains('details')) {
-                    li.removeChild(li.childNodes[i]);
-                }
-            }
-            li.appendChild(node);
-        });
+    /**
+     * toggles details and charts view
+     * @param {object} location current location
+     * @param {object} li       current clicked li
+     */
+    function toggleDetails(location, li) {
+        if (li.querySelector('.details')) {
+            charts.create(location).then(function() {
+                details.remove();
+            });
+            li.appendChild(charts.node);
+        } else {
+            details.create(location).then(function() {
+                charts.remove();
+            });
+            li.appendChild(details.node);
+        }
     }
+
+    function createButton(li) {
+        var button = document.createElement('button');
+        button.textContent = 'more…';
+        button.classList.add('more-button');
+        li.appendChild(button);
+        return button;
+    }
+
 });
 
 require(['components/location/list']);
