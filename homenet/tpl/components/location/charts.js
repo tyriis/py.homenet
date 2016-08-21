@@ -11,12 +11,13 @@ define('components/location/charts', ['ajax'], function(ajax) {
     var timeout;
     
     /**
-     * makes ajax request for 24h sensor data of specific sensor in current location and builds an access point for details, to make module loading possible
-     * @param   {object}  location current location
+     * creates charts element for 24h view and sets timeout 60 sec for refresh
+     * @param   {object}  location gets current location
      * @param   {boolean} update   if call by timeout, update true
-     * @returns {object}  Promise
+     * @returns {object}  promise
      */
     function create(location, update) {
+        // if update param is false, clear div
         if (!update) {
             node.innerHTML = '';
         }
@@ -31,10 +32,13 @@ define('components/location/charts', ['ajax'], function(ajax) {
                 }
                 // handle all collected promises at once
                 Promise.all(promises).then(function(all) {
+                    // clear node
                     node.innerHTML = '';
+                    // append all charts
                     for (var i = 0; i < all.length; i++) {
                         node.appendChild(createSensorChart(sensors[i], all[i]));
                     }
+                    // set timeout of 60 secs for refresh
                     timeout = setTimeout(function() {
                         create(location, true);
                     }, 60*1000);
@@ -44,6 +48,11 @@ define('components/location/charts', ['ajax'], function(ajax) {
         });
     }
     
+    /**
+     * gets all sensors from current location
+     * @param   {object} location current location
+     * @returns {object} promise
+     */
     function getSensors(location) {
         var url = sensorUrl.replace('%id%', location.id);
         return ajax.get(url);
@@ -51,8 +60,9 @@ define('components/location/charts', ['ajax'], function(ajax) {
 
     // load the google charts api with area chart package
     google.charts.load('current', {'packages':['corechart']});
+
     /**
-     * creates Google Charts element for chartview after clicking on sensor data overview in specific location
+     * creates google charts element for sensor unit
      * @param   {object} sensor current sensor
      * @param   {object} sensorActions full json object with 24h data of specific sensor
      * @returns {object} returns rendered element
@@ -64,7 +74,9 @@ define('components/location/charts', ['ajax'], function(ajax) {
         var sensorData = [['Time', sensor.unit]];
         for (var i = 0; i < sensorActions.length; i++) {
             var action = sensorActions[i];
-            var date = formatDate(action.time);
+            var date = action.time;
+/*            var date = formatDate(action.time);*/
+/*            var date = new Date(action.time);*/
             sensorData.push([date, action.value]);
         }
         // set a callback to run when the api is loaded
@@ -78,8 +90,8 @@ define('components/location/charts', ['ajax'], function(ajax) {
             // set chart options
             var options = {
                 title: sensor.key,
-                width: '100%',
-                height: '100%',
+                width: 600,
+                height: 300,
                 hAxis: {
                     title: 'Date',
                     titleTextStyle: {color: '#333'},
@@ -97,14 +109,14 @@ define('components/location/charts', ['ajax'], function(ajax) {
             switch (sensor.key) {
                 case 'humidity':
                     options.vAxis.format = '#\'%\'';
-                    options.vAxis.minValue = 0;
-                    options.vAxis.maxValue = 100;
+/*                    options.vAxis.minValue = 0;
+                    options.vAxis.maxValue = 100;*/
                     options.vAxis.gridlines.count = 3;
                     break;
                 case 'temperature':
                     options.vAxis.format = '# °C';
-                    options.vAxis.minValue = -20;
-                    options.vAxis.maxValue = 40;
+/*                    options.vAxis.minValue = -20;
+                    options.vAxis.maxValue = 40;*/
                     options.vAxis.gridlines.count = 3;
                     break;
                 case 'motion':
@@ -119,12 +131,12 @@ define('components/location/charts', ['ajax'], function(ajax) {
             var chart = new google.visualization.AreaChart(figure);
             chart.draw(data, options);
         }
-        // returns the chart for Promise
+        // returns the chart for promise
         return figure;
     }
     
     /**
-     * formats Timestamp to common date for hAxis
+     * formats timestamp to common date for hAxis
      * @param   {number} timestamp of sensor action
      * @returns {string} returns formatted date
      */
@@ -134,11 +146,14 @@ define('components/location/charts', ['ajax'], function(ajax) {
         var hours = date.getHours();
         // Minutes part from the timestamp
         var minutes = "0" + date.getMinutes();
-        // will display time in 10:30:23 format
+        // will display time in 10:30 format
         var formattedDate = hours + ':' + minutes.substr(-2);
         return formattedDate;
     }
 
+    /**
+     * clears timeout and removes charts element from dom
+     */
     function remove() {
         clearTimeout(timeout);
         // remove only if node is appended to dom

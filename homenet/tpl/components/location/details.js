@@ -10,12 +10,13 @@ define('components/location/details', ['ajax'], function(ajax) {
     var timeout;
     
     /**
-     * makes ajax request for sensor data of specific location and builds an access point for menu, to make module loading possible
-     * @param   {object}  location current location
+     * creates details element for 24h view and sets timeout 10 sec for refresh
+     * @param   {object}  location gets current location
      * @param   {boolean} update   if call by timeout, update true
-     * @returns {object}  Promise
+     * @returns {object}  promise
      */
     function create(location, update) {
+        // if update param is false, clear div
         if (!update) {
             node.innerHTML = '';
         }
@@ -27,6 +28,7 @@ define('components/location/details', ['ajax'], function(ajax) {
             for (var i = 0; i < sensors.length; i++) {
                 node.appendChild(createSensorDetail(sensors[i]));
             }
+            // set timeout of 10 secs for refresh
             timeout = setTimeout(function() {
                 create(location, true);
             }, 10*1000);
@@ -54,6 +56,9 @@ define('components/location/details', ['ajax'], function(ajax) {
         return figure;
     }
     
+    /**
+     * clears timeout and removes charts element from dom
+     */
     function remove() {
         clearTimeout(timeout);
         // remove only if node is appended to dom

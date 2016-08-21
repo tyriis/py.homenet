@@ -39,7 +39,7 @@ define('components/location/list', ['ajax', 'components/location/details', 'comp
     /**
      * toggles accordion
      * @param {object} li       current li element
-     * @param {object} location current location object
+     * @param {object} location current location
      * @param {object} event    current event
      */
     function toggleHandler(li, location, event) {
@@ -51,19 +51,24 @@ define('components/location/list', ['ajax', 'components/location/details', 'comp
             if (activeNodes[i] === li) {
                 continue;
             }
-            // else remove active class
+            // else remove all elements from dom
             activeNodes[i].classList.remove('active');
+            removeButton();
+            details.remove();
+            charts.remove();
         }
-        // and toggle active class
+        // toggle active class
         li.classList.toggle('active');
-
         if (li.classList.contains('active')) {
             details.create(location).then(function() {
                 createButton(li).addEventListener('click', toggleDetails.bind(null, location, li));
             });
             li.appendChild(details.node);
         } else {
+            // remove all elements from dom
+            removeButton();
             details.remove();
+            charts.remove();
         }
     }
 
@@ -86,12 +91,25 @@ define('components/location/list', ['ajax', 'components/location/details', 'comp
         }
     }
 
+    /**
+     * creates toggle button for details and charts
+     * @param   {object} li current clicked li
+     * @returns {object} returns rendered button element
+     */
     function createButton(li) {
         var button = document.createElement('button');
         button.textContent = 'more…';
         button.classList.add('more-button');
         li.appendChild(button);
         return button;
+    }
+
+    /**
+     * removes button element from dom
+     */
+    function removeButton() {
+        var button = document.querySelector('.more-button');
+        button.parentNode.removeChild(button);
     }
 
 });
