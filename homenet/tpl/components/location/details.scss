@@ -1,20 +1,18 @@
 @import 'css/vars';
 
-li {
-    .details {
-        margin: auto;
-        padding: 15px;
-        overflow: hidden;
-        opacity: 1;
-        max-height: 500px;
-        display: block;
-    }
+.details {
+    margin: auto;
+    padding: 15px;
+    overflow: hidden;
+    opacity: 1;
+    max-height: 500px;
+    display: block;
 
     figure {
         box-sizing: border-box;
         margin:5px;
         width: calc(33.33% - 10px);
-        display:inline-block;
+        display: inline-block;
         text-align: center;
         padding: 30px 0;
         border: 2px solid $accent-color-light;
@@ -27,8 +25,10 @@ li {
 
         figcaption {
             padding-top: 5px;
-            font-size: 1.4rem;
-            font-weight: 600;
+            font: {
+                size: 1.4rem;
+                weight: 600;
+            }
             color: $primary-text-color;
         }
     }

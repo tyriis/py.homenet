@@ -1,56 +1,61 @@
 @import "css/vars";
 
 .list {
-    ul {
-        li {
 
-            &:hover .list-button {
-                background: $primary-color-light;
-            }
+    li {
 
-            &.active {
-
-                .list-button {
-                    background: $primary-color;
-                    color: $primary-color-text;
-                    &:before {
-                        content: '▼';
-                        margin-right: 10px;
-                        color: $primary-color-text;
-                        font-size: 1.2rem;
-                        top: 0;
-                    }
-                }
-
-                /*details {
-                    padding: 15px;
-                    overflow: hidden;
-                    opacity: 1;
-                    max-height: 500px;
-                }*/
-            }
+        &:hover .list-button {
+            background: $primary-color-light;
         }
 
-        .list-button {
-            &:before {
-                content: '▶';
-                margin-right: 10px;
-                top: -2px;
-                position: relative;
-                color: $primary-color-dark;
-            }
+        &.active {
 
+            .list-button {
+                background: $primary-color;
+                color: $primary-color-text;
+
+                &:before {
+                    content: '▼';
+                    margin-right: 30px;
+                    color: $primary-color-text;
+                    top: 0;
+
+                    @media #{$desktop} {
+                        margin-right: 15px;
+                    }
+                }
+            }
+        }
+    }
+
+    .list-button {
+        padding: 30px;
+        padding-left: 50px;
+        width: 100%;
+        font-size: 3rem;
+        text-align: left;
+        background: $primary-color-text;
+        color: $primary-text-color;
+        border: 1px dotted $divider-color;
+        outline: none;
+        cursor: pointer;
+
+        @media #{$desktop} {
             padding: 15px;
-            padding-left: 30px;
-            width: 100%;
+            padding-left: 25px;
             font-size: 1rem;
-            text-align: left;
-            letter-spacing: 0.1rem;
-            background: $primary-color-text;
-            color: $primary-text-color;
-            border: 1px dotted $divider-color;
-            outline: none;
-            cursor: pointer;
+        }
+
+        &:before {
+            content: '▶';
+            margin-right: 30px;
+            color: $primary-color-dark;
+            top: -2px;
+            position: relative;
+
+            @media #{$desktop} {
+                margin-right: 15px;
+            }
         }
     }
 }

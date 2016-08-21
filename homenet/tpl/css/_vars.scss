@@ -10,3 +10,10 @@ $accent-color-light:   #FF9800;
 $primary-text-color:   #212121;
 $secondary-text-color: #757575;
 $divider-color:        #BDBDBD;
+
+//@media #{$phone} {}
+
+$phone: 'only screen and (max-width: 640px)';
+$tablet-small: 'only screen and (min-width: 641px) and (max-width: 1024px)';
+$tablet-large: 'only screen and (min-width: 1025px) and (max-width: 1440px)';
+$desktop:  'only screen and (min-width: 1441px)';
