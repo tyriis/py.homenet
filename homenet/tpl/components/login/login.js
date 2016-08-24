@@ -40,13 +40,13 @@
      * @param {object} event keyup event
      */
     function inputHandler(event) {
-        if (inputTimeout) {
+ /*       if (inputTimeout) {
             clearTimeout(inputTimeout);
         }
-        inputTimeout = setTimeout(function() {
+        inputTimeout = setTimeout(function() {*/
             validateField(event.target);
             validateForm();
-        }, 300);
+        //}, 1);
     }
 
     /**

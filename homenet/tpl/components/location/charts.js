@@ -74,8 +74,8 @@ define('components/location/charts', ['ajax'], function(ajax) {
         var sensorData = [['Time', sensor.unit]];
         for (var i = 0; i < sensorActions.length; i++) {
             var action = sensorActions[i];
-            var date = action.time;
-/*            var date = formatDate(action.time);*/
+/*            var date = action.time;*/
+            var date = formatDate(action.time);
 /*            var date = new Date(action.time);*/
             sensorData.push([date, action.value]);
         }
@@ -90,42 +90,54 @@ define('components/location/charts', ['ajax'], function(ajax) {
             // set chart options
             var options = {
                 title: sensor.key,
-                width: 600,
-                height: 300,
+                titleTextStyle: {
+                    fontName: 'Roboto',
+                    fontSize: 14
+                },
                 hAxis: {
-                    title: 'Date',
                     titleTextStyle: {color: '#333'},
-                    gridlines: {count: 4}
+                    slantedText: false,
+                    viewWindow: {
+                        max: 0
+                    }
+/*                    gridlines: {count: 4}*/
                 },
                 vAxis: {
                     format: '',
-                    minValue: '',
-                    maxValue: '',
+                    minValue: 0,
+                    maxValue: 0,
                     gridlines: {count: 5}
                 },
-                legend: {position: 'none'}
+                legend: {position: 'none'},
+                colors: []
             };
             // set specific options for every chart
             switch (sensor.key) {
                 case 'humidity':
+                    options.colors = ['#009688'];
+                    options.hAxis.viewWindow.max = 6;
                     options.vAxis.format = '#\'%\'';
-/*                    options.vAxis.minValue = 0;
-                    options.vAxis.maxValue = 100;*/
+                    options.vAxis.minValue = 0;
+                    options.vAxis.maxValue = 100;
                     options.vAxis.gridlines.count = 3;
                     break;
                 case 'temperature':
+                    options.colors = ['#303F9F'];
+                    options.hAxis.viewWindow.max = 5;
                     options.vAxis.format = '# °C';
-/*                    options.vAxis.minValue = -20;
-                    options.vAxis.maxValue = 40;*/
-                    options.vAxis.gridlines.count = 3;
+                    options.vAxis.minValue = -20;
+                    options.vAxis.maxValue = 40;
+                    options.vAxis.gridlines.count = 4;
                     break;
                 case 'motion':
+                    options.colors = ['#F44336'];
+                    options.hAxis.viewWindow.max = 6;
                     options.vAxis.format = '';
                     options.vAxis.gridlines.count = 2;
                     break;
-                default:
+/*                default:
                     options.vAxis.format = '';
-                    options.vAxis.gridlines.count = 5;
+                    options.vAxis.gridlines.count = 5;*/
             }
             // create and draw the visualization to element
             var chart = new google.visualization.AreaChart(figure);
