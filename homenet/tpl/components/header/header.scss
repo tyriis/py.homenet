@@ -5,14 +5,10 @@ header {
     text-align: center;
 
     h1 {
-        font-size: 3.5rem;
+        font-size: 2rem;
         font-weight: 400;
-        padding: 2.3rem 0;
+        padding: 1rem 0;
         color: $primary-color-text;
-        @media #{$desktop} {
-            font-size: 2rem;
-            padding: 1rem 0;
-        }
     }
 
     .usermenu {

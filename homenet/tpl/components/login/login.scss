@@ -27,7 +27,7 @@ form {
 
     .invalid {
         &:focus {
-            border-bottom: 1px solid $accent-color;
+            border-bottom: 1px solid $error-color;
         }
     }
 
@@ -38,7 +38,7 @@ form {
         width: 100%;
         font-size: 0.7rem;
         color: $secondary-text-color;
-        border-bottom: 1px solid $accent-color;
+        border-bottom: 1px solid $error-color;
     }
 
     button {
@@ -51,7 +51,7 @@ form {
         margin: 30px auto 0 auto;
         padding: 10px 0;
         width: 100%;
-        background: $accent-color;
+        background: $primary-color-dark;
         color: $primary-color-text;
         font-size: 1rem;
         font-weight: 900;

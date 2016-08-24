@@ -2,9 +2,13 @@
 
     figure {
         display: inline-block;
-        width: 33,33%;
+        width: 100%;
+        overflow:hidden;
         & > div > div {
             margin: auto;
+        }
+        & > div > div > div > svg > g > text {
+            text-transform: capitalize;
         }
     }
 
