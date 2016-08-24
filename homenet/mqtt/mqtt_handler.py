@@ -24,7 +24,7 @@ def visit_node(ctx, msg, topic_parts):
             if sensor.key in data.keys():
                 last_action = sensor.last_action
                 action = db.SensorAction(sensor=sensor)
-                if last_action.time > ref_time:
+                if last_action and last_action.time > ref_time and sensor.unit != 'motion':
                     action = last_action
                     action.time = now
                 action.value=data[sensor.key]
@@ -33,4 +33,3 @@ def visit_node(ctx, msg, topic_parts):
                 log.info('SensorAction@node%s -> %s:%s -> %s %s'
                         % (node_id, sensor.name, sensor.key,
                             "{:}".format(action.value), sensor.unit))
-
