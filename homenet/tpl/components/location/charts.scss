@@ -1,17 +1,27 @@
-.charts {
+@import 'css/vars';
 
-    figure {
+.charts {
+    display: block;
+    margin: auto;
+    padding: 15px;
+    opacity: 1;
+
+    .chart {
+        box-sizing: border-box;
         display: inline-block;
-        width: 100%;
-        overflow:hidden;
-        & > div > div {
-            margin: auto;
+        margin-bottom: 15px;
+        overflow: hidden;
+        text-align: center;
+        border: 1px solid $accent-color;
+
+        @media #{$desktop}, #{$tablet-large} {
+            margin: 5px;
+            width: calc(33.33% - 10px);
         }
-        & > div > div > div > svg > g > text {
-            text-transform: capitalize;
+
+        figure {
+            display: inline-block;
+            margin: 0 auto;
         }
     }
-
-
-
 }

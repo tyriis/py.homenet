@@ -15,13 +15,13 @@
         padding: 30px 0;
         border: 1px solid $accent-color;
 
-        @media #{$desktop} {
+        @media #{$desktop}, #{$tablet-large} {
             margin: 5px;
             width: calc(33.33% - 10px);
         }
 
         img {
-            width: 20%;
+            width: 15%;
             height: auto;
             color: $primary-text-color;
         }
@@ -29,7 +29,7 @@
         figcaption {
             padding-top: 5px;
             font: {
-                size: 1.4rem;
+                size: 1.5rem;
                 weight: 600;
             }
             color: $primary-text-color;
