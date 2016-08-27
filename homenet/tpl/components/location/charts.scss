@@ -10,7 +10,7 @@
         box-sizing: border-box;
         display: inline-block;
         margin-bottom: 15px;
-        overflow: hidden;
+        width: 100%;
         text-align: center;
         border: 1px solid $accent-color;
 
@@ -20,8 +20,13 @@
         }
 
         figure {
+            overflow: hidden;
             display: inline-block;
             margin: 0 auto;
+
+            @media #{$phone} {
+                width: 100%;
+            }
         }
     }
 }
