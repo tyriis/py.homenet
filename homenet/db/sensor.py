@@ -35,7 +35,7 @@ class Sensor(Storable):
         session = Session.object_session(self)
         return session.query(SensorAction).\
                 filter(SensorAction.sensor == self).\
-                filter(SensorAction.time > date.today() - timedelta(days=1)).\
+                filter(SensorAction.time > date.today() - timedelta(minutes=24 * 60)).\
                 order_by(SensorAction.time.asc())
 
     def date_actions(self, date):
