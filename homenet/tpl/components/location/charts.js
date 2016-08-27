@@ -91,9 +91,9 @@ define('components/location/charts', ['ajax'], function(ajax) {
                     fontName: 'Roboto',
                     fontSize: 14
                 },
-                tooltip: {
+/*                tooltip: {
                     isHtml: true
-                },
+                },*/
                 hAxis: {
                     titleTextStyle: {
                         color: '#333'
@@ -155,20 +155,42 @@ define('components/location/charts', ['ajax'], function(ajax) {
     }
     
     function prepareData(sensor, sensorActions, startDate, endDate) {
-        var data = [['Time', sensor.unit]];
+        var data;
+        var action;
+        var i;
+        if (sensor.unit === 'motion') {
+            // create exeption for motion sensor, timeline need specific data model
+            data = [['Motion', 'start', 'end']];
 
-        for (var i = 0; i < sensorActions.length; i++) {
-            var action = sensorActions[i];
-            if (i === 0) {
-                // inject fake action at first position of google chart, to make sure the chart is not broken if there are no values over time
-                data.push([startDate, action.value]);
+            for (i = 0; i < sensorActions.length; i++) {
+                action = sensorActions[i];
+                // if action value is 0, skip it for timeline rendering
+                if (action.value === 0) {
+                    continue;
+                }
+                var nextAction = sensorActions[i + 1];
+                // if there is no next action, skip
+                if (!nextAction) {
+                    continue;
+                }
+                console.log(new Date(action.time), new Date(nextAction.time));
+                data.push([sensor.key, new Date(action.time), new Date(nextAction.time)]);
             }
-            data.push([new Date(action.time), action.value]);
-            if (i === sensorActions.length - 1) {
-                data.push([endDate, action.value]);
+        } else {
+            // create data model for area charts
+            data = [['Time', sensor.key]];
+            for (i = 0; i < sensorActions.length; i++) {
+                action = sensorActions[i];
+                if (i === 0) {
+                    // inject fake action at first position of google chart, to make sure the chart is not broken if there are no values over time
+                    data.push([startDate, action.value]);
+                }
+                data.push([new Date(action.time), action.value]);
+                if (i === sensorActions.length - 1) {
+                    data.push([endDate, action.value]);
+                }
             }
         }
-
         return data;
     }
 
