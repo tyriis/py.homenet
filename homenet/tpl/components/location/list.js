@@ -99,8 +99,8 @@ define('components/location/list', ['ajax', 'components/location/details', 'comp
      */
     function showDetails(li) {
         details.create(location).then(function() {
-            charts.remove();
         });
+        charts.remove();
         li.appendChild(details.node);
     }
 
@@ -110,8 +110,8 @@ define('components/location/list', ['ajax', 'components/location/details', 'comp
      */
     function showCharts(li) {
         charts.create(location).then(function() {
-            details.remove();
         });
+        details.remove();
         li.appendChild(charts.node);
     }
 
