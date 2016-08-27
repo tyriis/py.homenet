@@ -3,7 +3,7 @@ from score.db import IdType
 from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship, Session
 from .action import SensorAction
-from datetime import date, timedelta
+from datetime import datetime, timedelta
 
 
 class Sensor(Storable):
@@ -35,7 +35,7 @@ class Sensor(Storable):
         session = Session.object_session(self)
         return session.query(SensorAction).\
                 filter(SensorAction.sensor == self).\
-                filter(SensorAction.time > date.today() - timedelta(minutes=24 * 60)).\
+                filter(SensorAction.time > datetime.today() - timedelta(days = 1)).\
                 order_by(SensorAction.time.asc())
 
     def date_actions(self, date):
