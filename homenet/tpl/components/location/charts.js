@@ -59,7 +59,7 @@ define('components/location/charts', ['ajax'], function(ajax) {
     }
 
     // load the google charts api with area chart package
-    google.charts.load('current', {'packages':['corechart']});
+    google.charts.load('current', {'packages':['corechart', 'timeline']});
 
     /**
      * creates google charts element for sensor unit
@@ -68,17 +68,14 @@ define('components/location/charts', ['ajax'], function(ajax) {
      * @returns {object} returns rendered element
      */
     function createSensorChart(sensor, sensorActions) {
+        var endDate = new Date();
+        var startDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate()-1, endDate.getHours(), endDate.getMinutes());
+        // create container for centering google chart
+        var div = document.createElement('div');
+        div.classList.add('chart');
         // creates the element for the google chart
         var figure = document.createElement('figure');
-        // create and populate the data table
-        var sensorData = [['Time', sensor.unit]];
-        for (var i = 0; i < sensorActions.length; i++) {
-            var action = sensorActions[i];
-/*            var date = action.time;*/
-            var date = formatDate(action.time);
-/*            var date = new Date(action.time);*/
-            sensorData.push([date, action.value]);
-        }
+        var sensorData = prepareData(sensor, sensorActions, startDate, endDate);
         // set a callback to run when the api is loaded
         google.charts.setOnLoadCallback(drawChart);
 
@@ -94,73 +91,85 @@ define('components/location/charts', ['ajax'], function(ajax) {
                     fontName: 'Roboto',
                     fontSize: 14
                 },
+                tooltip: {
+                    isHtml: true
+                },
                 hAxis: {
-                    titleTextStyle: {color: '#333'},
+                    titleTextStyle: {
+                        color: '#333'
+                    },
                     slantedText: false,
                     viewWindow: {
-                        max: 0
-                    }
-/*                    gridlines: {count: 4}*/
+                        min: startDate,
+                        max: endDate
+                    },
+                    gridlines: {
+                        // set to austrian time, buggy :>
+                        count: -1,
+                        units: {
+                          days: {format: ['MMM dd']},
+                          hours: {format: ['HH:mm']},
+                        }
+                    },
                 },
                 vAxis: {
-                    format: '',
-                    minValue: 0,
-                    maxValue: 0,
-                    gridlines: {count: 5}
+                    gridlines: {
+                        count: 5
+                    }
                 },
                 legend: {position: 'none'},
-                colors: []
             };
+            var gChart;
             // set specific options for every chart
             switch (sensor.key) {
                 case 'humidity':
+                    gChart = 'AreaChart';
                     options.colors = ['#009688'];
-                    options.hAxis.viewWindow.max = 6;
                     options.vAxis.format = '#\'%\'';
-                    options.vAxis.minValue = 0;
-                    options.vAxis.maxValue = 100;
+                    //options.vAxis.minValue = 0;
+                    //options.vAxis.maxValue = 100;
                     options.vAxis.gridlines.count = 3;
                     break;
                 case 'temperature':
+                    gChart = 'AreaChart';
                     options.colors = ['#303F9F'];
-                    options.hAxis.viewWindow.max = 5;
                     options.vAxis.format = '# °C';
-                    options.vAxis.minValue = -20;
-                    options.vAxis.maxValue = 40;
-                    options.vAxis.gridlines.count = 4;
+                    //options.vAxis.minValue = -20;
+                    options.vAxis.maxValue = 30;
+                    options.vAxis.gridlines.count = 3;
                     break;
                 case 'motion':
-                    options.colors = ['#F44336'];
-                    options.hAxis.viewWindow.max = 6;
-                    options.vAxis.format = '';
-                    options.vAxis.gridlines.count = 2;
+                    gChart = 'Timeline';
+                    //options.colors = ['#F44336'];
+                    //options.vAxis.gridlines.count = 2;
                     break;
-/*                default:
-                    options.vAxis.format = '';
-                    options.vAxis.gridlines.count = 5;*/
             }
             // create and draw the visualization to element
-            var chart = new google.visualization.AreaChart(figure);
+            var chart = new google.visualization[gChart](figure);
             chart.draw(data, options);
         }
+        // append to container
+        div.appendChild(figure);
         // returns the chart for promise
-        return figure;
+        return div;
     }
     
-    /**
-     * formats timestamp to common date for hAxis
-     * @param   {number} timestamp of sensor action
-     * @returns {string} returns formatted date
-     */
-    function formatDate(timestamp) {
-        var date = new Date(timestamp);
-        // hours part from the timestamp
-        var hours = date.getHours();
-        // Minutes part from the timestamp
-        var minutes = "0" + date.getMinutes();
-        // will display time in 10:30 format
-        var formattedDate = hours + ':' + minutes.substr(-2);
-        return formattedDate;
+    function prepareData(sensor, sensorActions, startDate, endDate) {
+        var data = [['Time', sensor.unit]];
+
+        for (var i = 0; i < sensorActions.length; i++) {
+            var action = sensorActions[i];
+            if (i === 0) {
+                // inject fake action at first position of google chart, to make sure the chart is not broken if there are no values over time
+                data.push([startDate, action.value]);
+            }
+            data.push([new Date(action.time), action.value]);
+            if (i === sensorActions.length - 1) {
+                data.push([endDate, action.value]);
+            }
+        }
+
+        return data;
     }
 
     /**
