@@ -22,10 +22,11 @@ define('components/location/charts', ['ajax'], function(ajax) {
             node.innerHTML = '';
         }
         return new Promise(function(resolve) {
-            // get the promises for every sensor in location
+            // request all sensors from current location
             getSensors(location).then(function(sensors) {
-                // array for promises
+                // array for dayData promises, so a refresh is possible without visible rendering. it waits with rendering till all promises are collected and then appends them at once
                 var promises = [];
+                // request dayData from every sensor and push it to promises array
                 for (var i = 0; i < sensors.length; i++) {
                     var url = baseUrl.replace('%id%', sensors[i].id);
                     promises.push(ajax.get(url));
@@ -58,24 +59,27 @@ define('components/location/charts', ['ajax'], function(ajax) {
         return ajax.get(url);
     }
 
-    // load the google charts api with area chart package
+    // load the google charts api with area and timeline chart packages
     google.charts.load('current', {'packages':['corechart', 'timeline']});
 
     /**
      * creates google charts element for sensor unit
-     * @param   {object} sensor current sensor
-     * @param   {object} sensorActions full json object with 24h data of specific sensor
+     * @param   {object} sensor         current sensor
+     * @param   {object} sensorActions  full json object with 24h data of specific sensor
      * @returns {object} returns rendered element
      */
     function createSensorChart(sensor, sensorActions) {
+        // get current date and date 24h ago for fixing empty values at the begining or end of the rendered chart
         var endDate = new Date();
         var startDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate()-1, endDate.getHours(), endDate.getMinutes());
-        // create container for centering google chart
+        // create container for centering google charts properly
         var div = document.createElement('div');
         div.classList.add('chart');
-        // creates the element for the google chart
+        // creates the element for every google chart
         var figure = document.createElement('figure');
+        // creates sensor data for chart
         var sensorData = prepareData(sensor, sensorActions, startDate, endDate);
+
         // set a callback to run when the api is loaded
         google.charts.setOnLoadCallback(drawChart);
 
@@ -84,16 +88,8 @@ define('components/location/charts', ['ajax'], function(ajax) {
          */
         function drawChart() {
             var data = google.visualization.arrayToDataTable(sensorData);
-            // set chart options
-            var options = {
-                title: sensor.key,
-                titleTextStyle: {
-                    fontName: 'Roboto',
-                    fontSize: 14
-                },
-/*                tooltip: {
-                    isHtml: true
-                },*/
+            // set chart options for area chart
+            var optionsArea = {
                 hAxis: {
                     titleTextStyle: {
                         color: '#333'
@@ -119,33 +115,42 @@ define('components/location/charts', ['ajax'], function(ajax) {
                 },
                 legend: {position: 'none'},
             };
+            var optionsTimeline = {
+                timeline: {
+                    showRowLabels: false
+                },
+                width: 267
+            };
             var gChart;
+            var options;
             // set specific options for every chart
             switch (sensor.key) {
                 case 'humidity':
                     gChart = 'AreaChart';
-                    options.colors = ['#009688'];
-                    options.vAxis.format = '#\'%\'';
-                    //options.vAxis.minValue = 0;
-                    //options.vAxis.maxValue = 100;
-                    options.vAxis.gridlines.count = 3;
+                    optionsArea.colors = ['#009688'];
+                    optionsArea.vAxis.format = '#\'%\'';
+                    //optionsArea.vAxis.minValue = 0;
+                    //optionsArea.vAxis.maxValue = 100;
+                    optionsArea.vAxis.gridlines.count = 3;
+                    options = optionsArea;
                     break;
                 case 'temperature':
                     gChart = 'AreaChart';
-                    options.colors = ['#303F9F'];
-                    options.vAxis.format = '# °C';
-                    //options.vAxis.minValue = -20;
-                    options.vAxis.maxValue = 30;
-                    options.vAxis.gridlines.count = 3;
+                    optionsArea.colors = ['#303F9F'];
+                    optionsArea.vAxis.format = '# °C';
+                    //optionsArea.vAxis.minValue = -20;
+                    optionsArea.vAxis.maxValue = 30;
+                    optionsArea.vAxis.gridlines.count = 3;
+                    options = optionsArea;
                     break;
                 case 'motion':
                     gChart = 'Timeline';
-                    //options.colors = ['#F44336'];
-                    //options.vAxis.gridlines.count = 2;
+                    options = optionsTimeline;
                     break;
             }
             // create and draw the visualization to element
             var chart = new google.visualization[gChart](figure);
+
             chart.draw(data, options);
         }
         // append to container
@@ -173,7 +178,6 @@ define('components/location/charts', ['ajax'], function(ajax) {
                 if (!nextAction) {
                     continue;
                 }
-                console.log(new Date(action.time), new Date(nextAction.time));
                 data.push([sensor.key, new Date(action.time), new Date(nextAction.time)]);
             }
         } else {
