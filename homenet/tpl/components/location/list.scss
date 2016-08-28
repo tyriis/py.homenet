@@ -27,6 +27,26 @@
                     top: 0;
                 }
             }
+
+            .tabs {
+                text-align: center;
+
+                button {
+                    display: inline-block;
+                    margin: 15px 7px 0 7px;
+                    padding: 10px 50px;
+                    background: $primary-color-dark;
+                    color: $primary-color-text;
+                    font-size: 1rem;
+                    font-weight: 900;
+                    line-height: 1.1;
+                    border: none;
+                    cursor: pointer;
+                    outline: 0;
+                    outline-offset: 0;
+                    transition: all 0.15s ease-in-out;
+                }
+            }
         }
     }
 

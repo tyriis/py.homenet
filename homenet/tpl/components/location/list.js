@@ -62,55 +62,58 @@ define('components/location/list', ['ajax', 'components/location/details', 'comp
             }
             // else remove all elements from dom
             activeNodes[i].classList.remove('active');
-            removeButton();
+            removeTabs();
             details.remove();
             charts.remove();
         }
         // toggle active class
         li.classList.toggle('active');
         if (li.classList.contains('active')) {
-            details.create(location).then(function() {
-                createButton(li).addEventListener('click', toggleDetails.bind(null, li));
-            });
+            createTabs(li, location);
+            details.create(location);
             li.appendChild(details.node);
         } else {
             // remove all elements from dom
-            removeButton();
+            removeTabs();
             details.remove();
             charts.remove();
         }
     }
 
     /**
-     * toggles details and charts view
-     * @param {object} li       current clicked li
-     */
-    function toggleDetails(li) {
-        if (li.querySelector('.details')) {
-            showCharts(li);
-        } else {
-            showDetails(li);
-        }
-    }
-
-    /**
      * show detail view
-     * @param {object} li current active li
      */
-    function showDetails(li) {
-        details.create(location).then(function() {
-        });
+    function showDetails() {
+        var li = getActiveLi();
+        // if no active li, nothing to do
+        if (!li) {
+            return;
+        }
+        var detailsNode = li.querySelector('.details');
+        // if details are already open, nothing to do
+        if (detailsNode) {
+            return;
+        }
+        details.create(location);
         charts.remove();
         li.appendChild(details.node);
     }
 
     /**
      * show charts view
-     * @param {object} li current active li
      */
-    function showCharts(li) {
-        charts.create(location).then(function() {
-        });
+    function showCharts() {
+        var li = getActiveLi();
+        // if no active li, nothing to do
+        if (!li) {
+            return;
+        }
+        var chartsNode = li.querySelector('.charts');
+        // if charts are already open, nothing to do
+        if (chartsNode) {
+            return;
+        }
+        charts.create(location);
         details.remove();
         li.appendChild(charts.node);
     }
@@ -120,20 +123,31 @@ define('components/location/list', ['ajax', 'components/location/details', 'comp
      * @param   {object} li current active li
      * @returns {object} returns rendered button element
      */
-    function createButton(li) {
-        var button = document.createElement('button');
-        button.textContent = 'switch…';
-        button.classList.add('switch-button');
-        li.appendChild(button);
-        return button;
+    function createTabs(li) {
+        var tabs = document.createElement('div');
+        tabs.classList.add('tabs');
+        li.appendChild(tabs);
+
+        var detailsButton = document.createElement('button');
+        detailsButton.textContent = 'Details';
+        detailsButton.classList.add('detailsButton');
+        detailsButton.addEventListener('click', showDetails);
+        tabs.appendChild(detailsButton);
+
+
+        var chartsButton = document.createElement('button');
+        chartsButton.textContent = 'Charts';
+        chartsButton.classList.add('chartsButton');
+        chartsButton.addEventListener('click', showCharts);
+        tabs.appendChild(chartsButton);
     }
 
     /**
      * removes button element from dom
      */
-    function removeButton() {
-        var button = document.querySelector('.switch-button');
-        button.parentNode.removeChild(button);
+    function removeTabs() {
+        var tabs = document.querySelector('.tabs');
+        tabs.parentNode.removeChild(tabs);
     }
 
     /**
@@ -188,7 +202,7 @@ define('components/location/list', ['ajax', 'components/location/details', 'comp
                 var charts = li.querySelector('.charts');
                 // if charts view is present, change to details
                 if (charts) {
-                    showDetails(li);
+                    showDetails();
                 }
             }
         // check if diffX is less than 0
@@ -204,7 +218,7 @@ define('components/location/list', ['ajax', 'components/location/details', 'comp
                 var details = li.querySelector('.details');
                 // if details view is present, change to charts
                 if (details) {
-                    showCharts(li);
+                    showCharts();
                 }
             }
         }
