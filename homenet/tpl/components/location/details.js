@@ -41,19 +41,88 @@ define('components/location/details', ['ajax'], function(ajax) {
      * @returns {object} returns rendered element
      */
     function createSensorDetail(sensor) {
-        // create figure element and image tags
-        var figure = document.createElement('figure');
-        var img = document.createElement('img');
-        // set specific images matching object key value
-        img.src = '/images/' + sensor.key + '.svg';
-        var figcaption = document.createElement('figcaption');
-        // create description with last value and measuring unit
-        figcaption.innerHTML = sensor.last_action.value + '&nbsp;' + sensor.unit;
-        // append them all
-        figure.appendChild(img);
-        figure.appendChild(figcaption);
+        // create container for elements
+        var div = document.createElement('div');
+        div.classList.add('sensorDetails');
+
+        // create header
+        var h3 = document.createElement('h3');
+        h3.innerHTML = sensor.key;
+        div.appendChild(h3);
+
+        // create container for current value and append
+        var current = document.createElement('div');
+        current.classList.add('current');
+        div.appendChild(current);
+
+        // create current title and append
+        var currentTitle = document.createElement('div');
+        currentTitle.classList.add('title');
+        currentTitle.innerHTML = 'Current';
+        current.appendChild(currentTitle);
+
+        // create current value and append
+        var currentValue = document.createElement('div');
+        currentValue.classList.add('value');
+        currentValue.innerHTML = sensor.last_action.value + '&nbsp;' + sensor.unit;
+        current.appendChild(currentValue);
+
+        // create container for last action value and append
+        var lastAction = document.createElement('div');
+        lastAction.classList.add('lastAction');
+        div.appendChild(lastAction);
+
+        // create last action title and append
+        var lastActionTitle = document.createElement('div');
+        lastActionTitle.classList.add('title');
+        lastActionTitle.innerHTML = 'last Action';
+        lastAction.appendChild(lastActionTitle);
+
+        // create last action value and append
+        var lastActionValue = document.createElement('div');
+        lastActionValue.classList.add('value');
+        var time = formatDate(sensor.last_action.time);
+        lastActionValue.innerHTML = time;
+        lastAction.appendChild(lastActionValue);
+
+        var svgImageBorder = document.createElement('div');
+        svgImageBorder.classList.add('svgImageBorder');
+
+        // create image and append
+        var svgImage = document.createElement('div');
+        svgImage.classList.add('svgImage');
+        switch (sensor.key) {
+            case 'humidity':
+                svgImageBorder.classList.add('humidity');
+                break;
+            case 'motion':
+                svgImageBorder.classList.add('motion');
+                break;
+            case 'temperature':
+                svgImageBorder.classList.add('temperature');
+                break;
+        }
+        svgImageBorder.appendChild(svgImage);
+        div.appendChild(svgImageBorder);
+
         // returns the div for Promise
-        return figure;
+        return div;
+    }
+
+    /**
+     * format timestamp of last action value
+     * @param   {number} timestamp of last sensor action
+     * @returns {string} formatted date hh:mm
+     */
+    function formatDate(timestamp) {
+        var date = new Date(timestamp);
+        // hours part from timestamp
+        var hours = date.getHours();
+        // minutes part from timestamp
+        var minutes = "0" + date.getMinutes();
+        // display time in 10:30 format
+        var formattedDate = hours + ':' + minutes.substr(-2);
+        return formattedDate;
     }
     
     /**
