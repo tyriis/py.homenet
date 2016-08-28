@@ -8,15 +8,25 @@
 
     .chart {
         box-sizing: border-box;
+        position: relative;
         display: inline-block;
         margin-bottom: 15px;
         width: 100%;
         text-align: center;
-        border: 1px solid $accent-color;
+        border: 1px solid $divider-color;
 
         @media #{$desktop}, #{$tablet-large} {
             margin: 5px;
             width: calc(33.33% - 10px);
+        }
+
+        h3 {
+            position: absolute;
+            margin: auto;
+            width: 100%;
+            top: 0.5rem;
+            text-transform: capitalize;
+            z-index: 1;
         }
 
         figure {
