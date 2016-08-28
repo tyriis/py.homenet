@@ -60,7 +60,7 @@ define('components/location/charts', ['ajax'], function(ajax) {
     }
 
     // load the google charts api with area and timeline chart packages
-    google.charts.load('current', {'packages':['corechart', 'timeline']});
+    google.charts.load('current', {'packages':['corechart']});
 
     /**
      * creates google charts element for sensor unit
@@ -75,6 +75,9 @@ define('components/location/charts', ['ajax'], function(ajax) {
         // create container for centering google charts properly
         var div = document.createElement('div');
         div.classList.add('chart');
+        var h3 = document.createElement('h3');
+        h3.innerHTML = sensor.key;
+        div.appendChild(h3);
         // creates the element for every google chart
         var figure = document.createElement('figure');
         // creates sensor data for chart
@@ -89,7 +92,9 @@ define('components/location/charts', ['ajax'], function(ajax) {
         function drawChart() {
             var data = google.visualization.arrayToDataTable(sensorData);
             // set chart options for area chart
-            var optionsArea = {
+            var options = {
+                width: 350,
+                height: 175,
                 hAxis: {
                     titleTextStyle: {
                         color: '#333'
@@ -115,41 +120,27 @@ define('components/location/charts', ['ajax'], function(ajax) {
                 },
                 legend: {position: 'none'},
             };
-            var optionsTimeline = {
-                timeline: {
-                    showRowLabels: false
-                },
-                width: 267
-            };
-            var gChart;
-            var options;
             // set specific options for every chart
             switch (sensor.key) {
                 case 'humidity':
-                    gChart = 'AreaChart';
-                    optionsArea.colors = ['#009688'];
-                    optionsArea.vAxis.format = '#\'%\'';
-                    //optionsArea.vAxis.minValue = 0;
-                    //optionsArea.vAxis.maxValue = 100;
-                    optionsArea.vAxis.gridlines.count = 3;
-                    options = optionsArea;
+                    options.colors = ['#536DFE'];
+                    options.vAxis.format = '#\'%\'';
+                    options.vAxis.gridlines.count = 3;
                     break;
                 case 'temperature':
-                    gChart = 'AreaChart';
-                    optionsArea.colors = ['#303F9F'];
-                    optionsArea.vAxis.format = '# °C';
-                    //optionsArea.vAxis.minValue = -20;
-                    optionsArea.vAxis.maxValue = 30;
-                    optionsArea.vAxis.gridlines.count = 3;
-                    options = optionsArea;
+                    options.colors = ['#FF5252'];
+                    options.vAxis.format = '# °C';
+                    options.vAxis.maxValue = 30;
+                    options.vAxis.gridlines.count = 3;
                     break;
                 case 'motion':
-                    gChart = 'Timeline';
-                    options = optionsTimeline;
+                    //options.colors = ['#F44336'];
+                    options.colors = ['#FFC107'];
+                    options.vAxis.gridlines.count = 2;
                     break;
             }
             // create and draw the visualization to element
-            var chart = new google.visualization[gChart](figure);
+            var chart = new google.visualization.AreaChart(figure);
 
             chart.draw(data, options);
         }
@@ -159,40 +150,41 @@ define('components/location/charts', ['ajax'], function(ajax) {
         return div;
     }
     
+    /**
+     * prepares Data model for google charts api, injects fake actions for better rendering
+     * @param   {object} sensor        current sensor
+     * @param   {object} sensorActions current sensor actions
+     * @param   {object} startDate     current date - 24 h
+     * @param   {object} endDate       current date
+     * @returns {object} returns data model for google charts array method
+     */
     function prepareData(sensor, sensorActions, startDate, endDate) {
-        var data;
-        var action;
-        var i;
-        if (sensor.unit === 'motion') {
-            // create exeption for motion sensor, timeline need specific data model
-            data = [['Motion', 'start', 'end']];
-
-            for (i = 0; i < sensorActions.length; i++) {
-                action = sensorActions[i];
-                // if action value is 0, skip it for timeline rendering
-                if (action.value === 0) {
-                    continue;
-                }
-                var nextAction = sensorActions[i + 1];
-                // if there is no next action, skip
-                if (!nextAction) {
-                    continue;
-                }
-                data.push([sensor.key, new Date(action.time), new Date(nextAction.time)]);
-            }
-        } else {
-            // create data model for area charts
-            data = [['Time', sensor.key]];
-            for (i = 0; i < sensorActions.length; i++) {
-                action = sensorActions[i];
-                if (i === 0) {
-                    // inject fake action at first position of google chart, to make sure the chart is not broken if there are no values over time
+        // create data model for area charts
+        var data = [['Time', sensor.key]];
+        // for every sensor action in the last 24h
+        for (var i = 0; i < sensorActions.length; i++) {
+            var action = sensorActions[i];
+            // inject fake action at first position of google chart, to avoid broken chart with no values at the beginning
+            if (i === 0) {
+                // if motion and first action value is 1, inject 0 to array
+                if (sensor.unit === 'motion' && action.value) {
+                    data.push([startDate, 0]);
+                } else {
+                    // inject first available value on first position
                     data.push([startDate, action.value]);
                 }
-                data.push([new Date(action.time), action.value]);
-                if (i === sensorActions.length - 1) {
-                    data.push([endDate, action.value]);
+            }
+            // inject fake 0 value before every motion action value with 1 to avoid broken chart with diagonal lines
+            if (sensor.unit === 'motion') {
+                if (action.value) {
+                    data.push([new Date(action.time), 0]);
                 }
+            }
+            // now push all available sensor actions chronological
+            data.push([new Date(action.time), action.value]);
+            // finally, at last position of google chart inject last known action value to avoid broken chart with no values at the end
+            if (i === sensorActions.length - 1) {
+                data.push([endDate, action.value]);
             }
         }
         return data;
