@@ -183,7 +183,7 @@ define('components/location/list', ['ajax', 'components/location/details', 'comp
                 diffY = diffY * -1;
             }
             // check if it is slide left or right, and add tolerance of 10 for tapping
-            if (diffY < diffX && diffX > 10) {
+            if (diffY < diffX && diffX > 150) {
                 var li = getActiveLi();
                 var charts = li.querySelector('.charts');
                 // if charts view is present, change to details
@@ -199,7 +199,7 @@ define('components/location/list', ['ajax', 'components/location/details', 'comp
                 diffY = diffY * -1;
             }
             // check if it is slide left or right, and add tolerance of 10 for tapping
-            if (diffY > diffX && diffX < -10) {
+            if (diffY > diffX && diffX < -150) {
                 var li = getActiveLi();
                 var details = li.querySelector('.details');
                 // if details view is present, change to charts
