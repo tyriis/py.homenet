@@ -72,14 +72,19 @@ define('components/location/charts', ['ajax'], function(ajax) {
         // get current date and date 24h ago for fixing empty values at the begining or end of the rendered chart
         var endDate = new Date();
         var startDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate()-1, endDate.getHours(), endDate.getMinutes());
+
         // create container for centering google charts properly
         var div = document.createElement('div');
         div.classList.add('chart');
+
+        // create header
         var h3 = document.createElement('h3');
         h3.innerHTML = sensor.key;
         div.appendChild(h3);
+
         // creates the element for every google chart
         var figure = document.createElement('figure');
+
         // creates sensor data for chart
         var sensorData = prepareData(sensor, sensorActions, startDate, endDate);
 
@@ -127,16 +132,15 @@ define('components/location/charts', ['ajax'], function(ajax) {
                     options.vAxis.format = '#\'%\'';
                     options.vAxis.gridlines.count = 3;
                     break;
+                case 'motion':
+                    options.colors = ['#FFC107'];
+                    options.vAxis.gridlines.count = 2;
+                    break;
                 case 'temperature':
                     options.colors = ['#FF5252'];
                     options.vAxis.format = '# °C';
                     options.vAxis.maxValue = 30;
                     options.vAxis.gridlines.count = 3;
-                    break;
-                case 'motion':
-                    //options.colors = ['#F44336'];
-                    options.colors = ['#FFC107'];
-                    options.vAxis.gridlines.count = 2;
                     break;
             }
             // create and draw the visualization to element
