@@ -58,13 +58,19 @@ define('components/location/details', ['ajax'], function(ajax) {
         // create current title and append
         var currentTitle = document.createElement('div');
         currentTitle.classList.add('title');
-        currentTitle.innerHTML = 'Current';
+        currentTitle.innerHTML = 'current';
         current.appendChild(currentTitle);
 
         // create current value and append
         var currentValue = document.createElement('div');
         currentValue.classList.add('value');
-        currentValue.innerHTML = sensor.last_action.value + '&nbsp;' + sensor.unit;
+        var value = sensor.last_action.value;
+        // if sensor is motion
+        if (sensor.key === 'motion') {
+            // set value to '', when 1, else 'no'
+            value = (value) ? '' : 'no';
+        }
+        currentValue.innerHTML = value  + ' ' + sensor.unit;
         current.appendChild(currentValue);
 
         // create container for last action value and append
@@ -75,7 +81,7 @@ define('components/location/details', ['ajax'], function(ajax) {
         // create last action title and append
         var lastActionTitle = document.createElement('div');
         lastActionTitle.classList.add('title');
-        lastActionTitle.innerHTML = 'last Action';
+        lastActionTitle.innerHTML = 'last action';
         lastAction.appendChild(lastActionTitle);
 
         // create last action value and append
@@ -111,6 +117,7 @@ define('components/location/details', ['ajax'], function(ajax) {
 
     /**
      * format timestamp of last action value
+     * from stackoverflow
      * @param   {number} timestamp of last sensor action
      * @returns {string} formatted date hh:mm
      */
@@ -119,9 +126,11 @@ define('components/location/details', ['ajax'], function(ajax) {
         // hours part from timestamp
         var hours = date.getHours();
         // minutes part from timestamp
-        var minutes = "0" + date.getMinutes();
+        var minutes = '0' + date.getMinutes();
+        // seconds part from timestamp
+        var seconds = '0' + date.getSeconds();
         // display time in 10:30 format
-        var formattedDate = hours + ':' + minutes.substr(-2);
+        var formattedDate = hours + ':' + minutes.substr(-2) + ':' +  seconds.substr(-2);
         return formattedDate;
     }
     
