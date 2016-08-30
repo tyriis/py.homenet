@@ -93,21 +93,12 @@ define('components/location/details', ['ajax'], function(ajax) {
 
         var svgImageBorder = document.createElement('div');
         svgImageBorder.classList.add('svgImageBorder');
+        svgImageBorder.classList.add(sensor.key);
 
         // create image and append
         var svgImage = document.createElement('div');
         svgImage.classList.add('svgImage');
-        switch (sensor.key) {
-            case 'humidity':
-                svgImageBorder.classList.add('humidity');
-                break;
-            case 'motion':
-                svgImageBorder.classList.add('motion');
-                break;
-            case 'temperature':
-                svgImageBorder.classList.add('temperature');
-                break;
-        }
+        
         svgImageBorder.appendChild(svgImage);
         div.appendChild(svgImageBorder);
 
