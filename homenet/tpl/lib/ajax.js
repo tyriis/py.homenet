@@ -103,10 +103,7 @@ define('ajax', [], function() {
             // if format json, set request header to accept only json
             if (params.format === 'json') {
                 xhr.setRequestHeader('Accept', 'json');
-                // if method is get, set content type request header
-                if (params.method !== 'GET') {
-                    xhr.setRequestHeader('Content-Type', 'application/json');
-                }
+                xhr.setRequestHeader('Content-Type', 'application/json');
             }
 
             // do, when xhr loaded
@@ -118,7 +115,7 @@ define('ajax', [], function() {
                 }
                 // if okay and format is json, parse it, resolve promise and return data
                 if (params.format === 'json') {
-                    return resolve(JSON.parse(xhr.responseText));
+                    return resolve(JSON.parse(xhr.response));
                 }
                 // if okay, but no json, resolve promise and return data
                 return resolve(xhr.response);

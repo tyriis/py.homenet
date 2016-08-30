@@ -226,4 +226,3 @@ define('components/location/list', ['ajax', 'components/location/details', 'comp
 
 });
 
-require(['components/location/list']);
