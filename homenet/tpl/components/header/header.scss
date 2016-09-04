@@ -1,6 +1,7 @@
 @import "css/vars";
 
 header {
+    position: relative;
     background-color: $primary-color-dark;
     text-align: center;
 
@@ -12,23 +13,34 @@ header {
     }
 
     .usermenu {
+        box-sizing: border-box;
+        display: inline-block;
         position: absolute;
+        padding-top: 18px;
         top: 0;
+        left: 0;
         right: 0;
+        margin: 0 1.5rem;
 
-        .logout-icon {
-            display: block;
-            top: 22px;
-            right: 20px;
-            position: absolute;
+        .menu-icon {
+            float: left;
             width: 25px;
             height: 25px;
-            display: block;
+            background-color: $primary-color-text;
+            -webkit-mask: url('/images/menu.svg') center center;
+            -webkit-mask-repeat: no-repeat;
+            -webkit-mask-size: 35px;
+        }
+
+        .logout-icon {
+            float: right;
+            width: 25px;
+            height: 25px;
             background-color: $primary-color-text;
             -webkit-mask-image: url('/images/logout.svg');
-            mask-image: url('/images/logout.svg');
+            -webkit-mask-repeat: no-repeat;
+            -webkit-mask-size: 25px;
         }
     }
-
 }
 
