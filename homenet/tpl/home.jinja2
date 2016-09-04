@@ -5,11 +5,13 @@
 
 {% block usermenu %}
     <div class="usermenu">
-        <a class='logout-icon' href="{{ ctx.url('logout') }}"></a>
+        <a class="menu-icon" href="#"></a>
+        <a class="logout-icon" href="{{ ctx.url('logout') }}"></a>
     </div>
 {% endblock %}
 
 {% block content %}
+    {% include 'components/sidebar/sidebar.html' %}
     <div class="list"></div>
 {% endblock %}
 
@@ -19,7 +21,8 @@
     {{ js(ctx, 'components/location/charts.js') }}
     {{ js(ctx, 'components/location/details.js') }}
     {{ js(ctx, 'components/location/list.js') }}
+    {{ js(ctx, 'components/sidebar/sidebar.js') }}
     <script>
-        require(['components/list']);
+        require(['components/sidebar/sidebar', 'components/location/list']);
     </script>
 {% endblock %}
