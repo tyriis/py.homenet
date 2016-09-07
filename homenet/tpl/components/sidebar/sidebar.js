@@ -7,21 +7,12 @@ define('components/sidebar/sidebar', [], function() {
     var menuIcon = document.querySelector('.menu-icon');
     var sidebar = document.querySelector('.sidebar');
     var list = document.querySelector('.list');
-    var closeButton = document.querySelector('.closeButton');
 
-    menuIcon.addEventListener('click', openSidebar);
+    menuIcon.addEventListener('click', toggleSidebar);
 
-    function openSidebar() {
-        if (sidebar.classList.contains('close')) {
-            sidebar.classList.remove('close');
-        }
-        sidebar.classList.add('open');
-        closeButton.addEventListener('click', closeSidebar);
+    function toggleSidebar() {
+        sidebar.classList.toggle('openSide');
+        list.classList.toggle('openMenu');
     }
 
-    function closeSidebar() {
-        sidebar.classList.remove('open');
-        sidebar.classList.add('close');
-        closeButton.removeEventListener('click', closeSidebar);
-    }
 });

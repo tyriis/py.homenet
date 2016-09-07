@@ -16,24 +16,27 @@ header {
         box-sizing: border-box;
         display: inline-block;
         position: absolute;
-        padding-top: 18px;
         top: 0;
         left: 0;
         right: 0;
-        margin: 0 1.5rem;
 
         .menu-icon {
-            float: left;
+            position: absolute;
+            left: 1.5rem;
+            top: 1.2rem;
             width: 25px;
             height: 25px;
             background-color: $primary-color-text;
             -webkit-mask: url('/images/menu.svg') center center;
             -webkit-mask-repeat: no-repeat;
             -webkit-mask-size: 35px;
+            cursor: pointer;
         }
 
         .logout-icon {
-            float: right;
+            position: absolute;
+            right: 1.5rem;
+            top: 1.2rem;
             width: 25px;
             height: 25px;
             background-color: $primary-color-text;

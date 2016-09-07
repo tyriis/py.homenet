@@ -1,20 +1,13 @@
 @import "css/vars";
 
-* {
-    box-sizing: border-box;
-}
-
 .sidebar {
-    height: 100%;
-    width: 0;
     position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
+    width: 0;
+    height: 100%;
     background-color: $primary-text-color;
-    overflow-x: hidden; // disable horizontal scroll
-    padding-top: 60px;
-    transition: transform 0.5s ease-in-out;
+    z-index: 1;
+    transition: width .5s;
+    overflow-x: hidden;
 
     ul {
         margin: 0;
@@ -22,33 +15,35 @@
         list-style: none;
         text-align: center;
         line-height: 1.8;
+        white-space: nowrap;
+
+        a {
+            &:hover {
+                color: $accent-color;
+            }
+            display: block;
+            padding: 8px 8px 8px 32px;
+            color: $primary-color-text;
+            text-decoration: none;
+            transition: color 0.15s ease-in-out;
+
+    /*        .closeButton {
+                position: absolute;
+                top: 0;
+                right: 25px;
+                font-size: 36px;
+                margin-left: 50px;
+            }*/
+        }
     }
 
-    a {
-        &:hover {
-            color: $accent-color;
-        }
-        display: block;
-        padding: 8px 8px 8px 32px;
-        color: $primary-color-text;
-        text-decoration: none;
-        transition: color 0.15s ease-in-out;
-
-        .closeButton {
-            position: absolute;
-            top: 0;
-            right: 25px;
-            font-size: 36px;
-            margin-left: 50px;
-        }
-    }
 }
 
-    .open {
-        width: 100%;
+    .openSide {
+        width: 15rem;
         //transform: translate(0, -50%);
     }
 
-    .close {
-        width: 0;
+    .openMenu {
+        margin-left: 15rem;
     }
