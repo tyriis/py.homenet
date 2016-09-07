@@ -2,9 +2,11 @@
 
 .list {
     transition: margin-left .5s;
-    //padding: 20px;
+    box-shadow: -5px 0px 4px 0px rgba(0,0,0,0.2);
 
     li {
+
+        white-space: nowrap;
 
         &:hover .list-button {
             background: $primary-color-light;
