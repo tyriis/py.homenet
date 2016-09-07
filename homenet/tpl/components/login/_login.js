@@ -27,7 +27,7 @@
     function enableSubmit() {
         submitButton.removeAttribute('disabled');
     }
-    
+
     /**
      * disable button when page loads
      */
