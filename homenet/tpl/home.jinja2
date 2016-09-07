@@ -5,7 +5,7 @@
 
 {% block usermenu %}
     <div class="usermenu">
-        <a class="menu-icon" href="#"></a>
+        <span class="menu-icon"></span>
         <a class="logout-icon" href="{{ ctx.url('logout') }}"></a>
     </div>
 {% endblock %}
@@ -16,12 +16,9 @@
 {% endblock %}
 
 {% block js %}
+    {{ super() }}
     {# google charts api #}
     <script src="https://www.gstatic.com/charts/loader.js"></script>
-    {{ js(ctx, 'components/location/charts.js') }}
-    {{ js(ctx, 'components/location/details.js') }}
-    {{ js(ctx, 'components/location/list.js') }}
-    {{ js(ctx, 'components/sidebar/sidebar.js') }}
     <script>
         require(['components/sidebar/sidebar', 'components/location/list']);
     </script>

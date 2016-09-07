@@ -6,6 +6,8 @@
     <title>{% block title %}{% endblock %}</title>
     {# load all css elements here #}
     {{ css(ctx) }}
+    {# load require first #}
+    {{ js(ctx, 'lib/require.js') }}
 </head>
 <body>
     <header>
@@ -17,11 +19,10 @@
     {% block content %}
     {% endblock %}
     
-    {# load modules first #}
-    {{ js(ctx, 'lib/require.js') }}
-    {{ js(ctx, 'lib/ajax.js') }}
-    {# load js elements #}
+    {# load all js elements #}
     {% block js %}
+        {{ js(ctx, 'lib/ajax.js') }}
+        {{ js(ctx) }}
     {% endblock %}
 </body>
 </html>
