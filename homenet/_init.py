@@ -50,7 +50,7 @@ class LoginAuthenticator(Authenticator):
             return None
         username = ctx.http.request.POST['username']
         user = ctx.db.query(db.User).\
-            filter(db.User.username == username).\
+            filter(db.User.username.ilike(username)).\
             first()
         if not user:
             return None
