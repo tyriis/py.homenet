@@ -9,15 +9,17 @@
     .chart {
         box-sizing: border-box;
         position: relative;
-        display: inline-block;
+        display: block;
         margin-bottom: 15px;
         width: 100%;
+        overflow: hidden;
         text-align: center;
         border: 1px solid $divider-color;
 
         @media #{$desktop}, #{$tablet-large} {
             margin: 5px;
             width: calc(33.33% - 10px);
+            display: inline-block;
         }
 
         h3 {
