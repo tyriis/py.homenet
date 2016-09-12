@@ -33,7 +33,8 @@ setup(
         'sqlalchemy_utils',
         'passlib',
         'PyYAML',
-        'docutils'
+        'docutils',
+        'alembic'
     ],
     entry_points={
         'score.cli': [
