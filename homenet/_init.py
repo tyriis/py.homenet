@@ -56,6 +56,9 @@ class LoginAuthenticator(Authenticator):
             return None
         if not user.verify_password(ctx.http.request.POST['password']):
             return None
+        if 'persist' in ctx.http.request.POST:
+            persist = user.get_persist_hash(ctx, False)
+        ctx.http.response.set_cookie('persist', persist, max_age=(60 * 60 * 24 * 365))
         # we have a logged in user, so pass it to all subsequent
         # authenticators to allow them storing the value.
         self.next.store(ctx, user)
