@@ -4,46 +4,38 @@
     position: fixed;
     width: 0;
     height: 100%;
-    background-color: $primary-text-color;
     z-index: 1;
     transition: width .5s;
-    overflow-x: hidden;
+    overflow: hidden;
 
-    ul {
-        margin: 0;
-        padding: 0;
-        list-style: none;
-        text-align: center;
-        line-height: 1.8;
-        white-space: nowrap;
+    .overlay {
+        width: 15rem;
+        height: 100%;
+        background-color: $primary-text-color;
 
-        a {
-            &:hover {
-                color: $accent-color;
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            white-space: nowrap;
+            text-align: center;
+            border: 1px dotted $divider-color;
+
+            a {
+                &:hover {
+                    color: $accent-color;
+                }
+                font-size: 1.1rem;
+                display: block;
+                padding: 1.5rem 0;
+                color: $primary-color-text;
+                text-decoration: none;
+                transition: color 0.15s ease-in-out;
             }
-            display: block;
-            padding: 8px 8px 8px 32px;
-            color: $primary-color-text;
-            text-decoration: none;
-            transition: color 0.15s ease-in-out;
-
-    /*        .closeButton {
-                position: absolute;
-                top: 0;
-                right: 25px;
-                font-size: 36px;
-                margin-left: 50px;
-            }*/
         }
     }
-
 }
 
     .openSide {
-        width: 15rem;
-        //transform: translate(0, -50%);
-    }
-
-    .openMenu {
-        margin-left: 15rem;
-    }
+        width: 100%;
+}
