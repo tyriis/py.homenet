@@ -16,50 +16,35 @@ def user(ctx, user: db.User):
     ctx.http.response.content_type = 'application/json'
     return user.as_JSON()
 
-#@router.route('rest/sensor/actions', '/rest/sensors/{sensor.id}/actions/{mode}')
-#def sensor_actions(ctx, sensor: db.Sensor, mode):
-#    ctx.http.response.content_type = 'application/json'
-#    if mode == 'day':
-#        data = [action.as_dict() for action in sensor.daily_actions]
-#        return json.dumps(data, sort_keys=True, indent=4, separators=(',', ': '))
 
-#@sensor_actions.match2vars
-#def sensor_actions_match2vars(ctx, matches):
-#    sensor = ctx.db.query(db.Sensor).get(matches['sensor.id'])
-#    assert isinstance(sensor, db.Sensor), 'first arg must be of type db.Sensor'
+@router.route('rest/user/_update_password', '/rest/users/{user.id}/_update_password')
+def update_password(ctx, user: db.User, password, new_password):
+    ctx.http.response.content_type = 'application/json'
+    if not user.verify_password(password):
+        return false
+    if not new_password:
+        return false
+    user.password = new_password
+    user.persist_hash = None
+    return True
+
+@update_password.match2vars
+def update_password_match2vars(ctx, matches):
+    user = ctx.db.query(db.User).get(matches['user.id'])
+    assert isinstance(user, db.User), 'first arg must be of type db.User'
+    assert ctx.http.request.method == 'POST', 'only POST request allowed'
+    assert 'password' in ctx.http.request.POST, 'current password required'
+    assert 'new_password' in ctx.http.request.POST, 'new password required'
+    return {
+        'user': user,
+        'password': ctx.http.request.POST['password'],
+        'new_password': ctx.http.request.POST['new_password']
+    }
+
+
+#@update_password.vars2urlparts
+#def update_password_vars2urlparts(ctx, user: db.User):
 #    return {
-#        'sensor': sensor,
-#        'mode': matches['mode']
-#    }
-
-
-#@sensor_actions.vars2urlparts
-#def sensor_actions_vars2urlparts(ctx, sensor: db.Sensor, mode):
-#    return {
-#        'sensor.id': sensor.id,
-#        'mode': mode,
-#    }
-
-#@router.route('rest/sensor/actions/date', '/rest/sensors/{sensor.id}/actions/date/{date>\d\d\d\d-\d\d-\d\d}')
-#def sensor_date_actions(ctx, sensor: db.Sensor, date: datetime):
-#    ctx.http.response.content_type = 'application/json'
-#    data = [action.as_dict() for action in sensor.date_actions(date)]
-#    return json.dumps(data, sort_keys=True, indent=4, separators=(',', ': '))
-
-#@sensor_date_actions.match2vars
-#def senor_date_actions_match2vars(ctx, matches):
-#    sensor = ctx.db.query(db.Sensor).get(matches['sensor.id'])
-#    assert isinstance(sensor, db.Sensor), 'first arg must be of type db.Sensor'
-#    date = datetime.strptime(matches['date'], '%Y-%m-%d').date()
-#    return {
-#        'sensor': sensor,
-#        'date': date
-#    }
-
-#@sensor_date_actions.vars2urlparts
-#def sensor_date_actions_vars2urlparts(ctx, sensor: db.Sensor, date: datetime):
-#    return {
-#        'sensor.id': sensor.id,
-#        'date': date
+#        'user.id': user.id,
 #    }
 
