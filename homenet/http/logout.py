@@ -8,4 +8,5 @@ def logout(ctx):
     ctx.http.response.status_code = 302
     ctx.http.response.location = '/'
     ctx.http.response.set_cookie('session', '', max_age=0)
+    ctx.http.response.set_cookie('persist', '', max_age=0)
     return ctx.http.response
