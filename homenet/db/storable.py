@@ -14,6 +14,10 @@ def as_dict(self, only_members=None):
             continue
         if member[0].endswith('_id') and member[0].replace('_id', '') in _dict:
             continue
+        if member[0] == 'password':
+            continue
+        if member[0].endswith('_hash'):
+            continue
         _value = getattr(self, member[0])
         if type(member[1]) != RelationshipProperty:
             if type(_value)  == datetime:
