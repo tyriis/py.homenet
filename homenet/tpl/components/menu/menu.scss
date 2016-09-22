@@ -1,15 +1,18 @@
 @import "css/vars";
 
-.sidebar {
+.menu {
     position: fixed;
+    display: block;
     width: 0;
     height: 100%;
     z-index: 1;
     transition: width .5s;
     overflow: hidden;
 
-    .overlay {
-        width: 15rem;
+    .sidebar {
+        position: relative;
+        display: inline-block;
+        width: 15%;
         height: 100%;
         background-color: $primary-text-color;
 
@@ -33,6 +36,13 @@
                 transition: color 0.15s ease-in-out;
             }
         }
+    }
+
+    .passwordForm {
+        position: relative;
+        display: inline-block;
+        width: 70%;
+        height: 100%;
     }
 }
 
