@@ -21,26 +21,49 @@ def user(ctx, user: db.User):
 def update_password(ctx, user: db.User, password, new_password):
     ctx.http.response.content_type = 'application/json'
     if not user.verify_password(password):
-        return false
+        return False
     if not new_password:
-        return false
+        return False
     user.password = new_password
     user.persist_hash = None
-    return True
+    return json.dumps(True)
 
 @update_password.match2vars
 def update_password_match2vars(ctx, matches):
     user = ctx.db.query(db.User).get(matches['user.id'])
     assert isinstance(user, db.User), 'first arg must be of type db.User'
     assert ctx.http.request.method == 'POST', 'only POST request allowed'
-    assert 'password' in ctx.http.request.POST, 'current password required'
-    assert 'new_password' in ctx.http.request.POST, 'new password required'
+   data = json.loads(ctx.http.request.body.decode("utf-8"))
+    assert 'password' in data, 'current password required'
+    assert 'new_password' in data, 'new password required'
     return {
         'user': user,
-        'password': ctx.http.request.POST['password'],
-        'new_password': ctx.http.request.POST['new_password']
+        'password': data['password'],
+        'new_password': data['new_password']
     }
 
+@router.route('rest/user/_update_own_password', '/rest/users/_update_own_password')
+def update_own_password(ctx, password, new_password):
+    user = ctx.user
+    ctx.http.response.content_type = 'application/json'
+    if not user.verify_password(password):
+        return False
+    if not new_password:
+        return False
+    user.password = new_password
+    user.persist_hash = None
+    return json.dumps(True)
+
+@update_own_password.match2vars
+def update_own_password_match2vars(ctx, matches):
+    assert ctx.http.request.method == 'POST', 'only POST request allowed'
+    data = json.loads(ctx.http.request.body.decode("utf-8"))
+    assert 'password' in data, 'current password required'
+    assert 'new_password' in data, 'new password required'
+    return {
+        'password': data['password'],
+        'new_password': data['new_password']
+    }
 
 #@update_password.vars2urlparts
 #def update_password_vars2urlparts(ctx, user: db.User):
