@@ -33,7 +33,7 @@ def update_password_match2vars(ctx, matches):
     user = ctx.db.query(db.User).get(matches['user.id'])
     assert isinstance(user, db.User), 'first arg must be of type db.User'
     assert ctx.http.request.method == 'POST', 'only POST request allowed'
-   data = json.loads(ctx.http.request.body.decode("utf-8"))
+    data = json.loads(ctx.http.request.body.decode("utf-8"))
     assert 'password' in data, 'current password required'
     assert 'new_password' in data, 'new password required'
     return {

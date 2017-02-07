@@ -93,8 +93,8 @@
         // if event.target is password input
         } else {
             // check if password input has valid length, else show error
-            if (passwordInput.value.length < 6) {
-                showError('Das Passwort muss mindestens 6 Zeichen lang sein.', passwordInput);
+            if (passwordInput.value.length < 1) {
+                showError('Das Passwort muss mindestens 1 Zeichen lang sein.', passwordInput);
                 return;
             }
         }
